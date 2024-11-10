@@ -34,7 +34,7 @@ export default function Home() {
       >
         <div className="flex flex-col gap-4">
           <div>
-            <h1 className="text-9xl font-bold text-left text-white">stoX.</h1>
+            <h1 className="text-9xl font-bold text-left text-white">MoonstoX.</h1>
             <p className="text-2xl text-white">we let you look at your stocks or something, who cares!</p>
           </div>
           <div className="flex  flex-col gap-2">

@@ -26,7 +26,7 @@ export default function RootLayout({
 
                 <div className="flex justify-between items-center w-full p-4 px-20 bg-base-300 shadow-md">
                     <div className="flex items-center gap-4">
-                        <h1 className="text-5xl font-thin">S t o X.</h1>
+                        <h1 className="text-5xl font-thin">M o o n S t o X.</h1>
 
                     </div>
                     <div className="flex items-center gap-4">
