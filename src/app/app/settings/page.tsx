@@ -39,7 +39,7 @@ export default function SettingsPage() {
                 <option value="lofi">Lofi</option>
                 <option value="coffee">Coffee</option>
                 <option value="valentine">Valentine</option>
-                <option value="luxury">Luxury</option>
+                <option value="emerald">Emerald</option>
                 <option value="dracula">Dracula</option>
                 <option value="black">Black</option>
                 <option value="business">Business</option>
