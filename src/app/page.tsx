@@ -4,6 +4,7 @@ import NavBar from "@/components/NavBar";
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { SignInButton, SignUpButton } from "@clerk/nextjs";
+import Image from "next/image";
 
 export default function Home() {
   useEffect(() => {
@@ -40,11 +41,21 @@ export default function Home() {
           <div className="flex  flex-col gap-2">
 
             <SignInButton>
-              <button className='btn btn-primary border-none text-white text-xl font-bold'>Login</button>
+              <div className="container hover:cursor-pointer hover:scale-105 hover:animate-pulse">
+                <img
+                  className=""
+                  alt="star" width={200} height={200} src="https://images.vexels.com/content/283648/preview/pink-rounded-star-9619ee.png" />
+                <span className="centered font-bold text-zinc-600 text-2xl">Login</span>
+              </div>
             </SignInButton>
 
             <SignUpButton>
-              <button className="btn border-none text-xl font-bold">Sign-up</button>
+              <div className="container-two hover:cursor-pointer hover:scale-105 hover:animate-pulse">
+                <img
+                  className=""
+                  alt="star" width={128} height={128} src="https://images.vexels.com/content/283648/preview/pink-rounded-star-9619ee.png" />
+                <span className="centered font-bold text-zinc-600 text-xl">Sign-up</span>
+              </div>
             </SignUpButton>
           </div>
         </div>

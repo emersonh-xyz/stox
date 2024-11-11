@@ -53,5 +53,21 @@
 }
 
 .side-nav-item {
-  @apply bg-primary text-white h-20 w-20 rounded-2xl p-4 cursor-pointer hover:bg-primary/50;
+  @apply bg-primary text-white h-16 w-16 rounded-2xl p-4 cursor-pointer hover:bg-primary/50;
+}
+
+
+.container {
+  height: 200px;
+  width: 200px;
+  position: relative;
+  text-align: center;
+
+}
+
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
