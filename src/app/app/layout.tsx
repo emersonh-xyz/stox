@@ -1,9 +1,11 @@
 'use client';
 
+import { OnbWelcomeCard } from "@/components/OnboardingCard";
 import WidgetAdder from "@/components/WidgetAdder";
 import { UserButton } from "@clerk/nextjs"
 import { Home, Info, Newspaper, PlusCircleIcon, Settings, Users } from "lucide-react"
-import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { themeChange } from "theme-change";
 
 export default function RootLayout({
@@ -13,17 +15,36 @@ export default function RootLayout({
 }) {
 
 
+    const [isOnboarding, setIsOnboarding] = useState(false);
+    const searchParams = useSearchParams()
+    const onboarding = searchParams.get('onboarding')
+
     useEffect(() => {
+        // get query params
+
+
+        if (onboarding) {
+            setIsOnboarding(true);
+        }
+
+        // if (onboarding) {
+        //     const modal = document.getElementById("modal_1");
+        //     if (modal) {
+        //         modal.showModal();
+        //     }
+        // }
+
 
         themeChange(false)
         // 👆 false parameter is required for react project
 
-    }, [])
+    }, [onboarding])
 
     return (
         // <ClerkProvider>
         <html lang="en" >
             <body className="flex flex-col h-screen ">
+                {isOnboarding && <OnbWelcomeCard />}
                 <div className="flex justify-between items-center w-full p-4 px-20 bg-base-300 shadow-md">
                     <div className="flex items-center gap-4">
                         <h1 className="text-5xl font-thin">S t o X.</h1>
