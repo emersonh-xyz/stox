@@ -1,7 +1,8 @@
 'use client';
 
+import WidgetAdder from "@/components/WidgetAdder";
 import { UserButton } from "@clerk/nextjs"
-import { Home, Info, Newspaper, Settings, Users } from "lucide-react"
+import { Home, Info, Newspaper, PlusCircleIcon, Settings, Users } from "lucide-react"
 import { useEffect } from "react";
 import { themeChange } from "theme-change";
 
@@ -18,8 +19,6 @@ export default function RootLayout({
         // 👆 false parameter is required for react project
 
     }, [])
-
-
 
     return (
         // <ClerkProvider>
@@ -47,7 +46,7 @@ export default function RootLayout({
 
                 {/* Start Side Navigation Menu */}
 
-                <div className="flex ">
+                <div className="flex justify-between ">
                     <div className="py-14 px-2 m-12 rounded-full bg-base-300 drop-shadow-md shadow-md flex items-center ">
                         <ul className="flex flex-col items-center gap-12">
                             <a href="/app">
@@ -69,6 +68,9 @@ export default function RootLayout({
                     </div >
                     <div className="flex justify-center p-20">
                         {children}
+                    </div>
+                    <div className="py-8 px-24">
+                        <WidgetAdder />
                     </div>
                 </div>
             </body >
