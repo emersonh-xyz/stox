@@ -1,5 +1,4 @@
 import { getAllStocks, getStockQuote } from "@/app/utility/finnhub"
-import { headers } from "next/headers";
 import { NextRequest } from "next/server"
 
 export const dynamic = 'force-static'

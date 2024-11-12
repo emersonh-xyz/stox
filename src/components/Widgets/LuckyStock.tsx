@@ -57,7 +57,7 @@ export default function LuckyStock({ data }: { data: Stock[] }) {
     return (
         <div className="flex flex-col gap-4 animate-in w-full">
             <h1 className="font-bold text-2xl">Lucky Stock</h1>
-            <div className="flex flex-col gap-2 bg-base-300 rounded-full p-4 w-full ">
+            <div className="flex flex-col gap-2 bg-base-300 rounded-md p-4 w-full ">
                 {!rolling && !stock &&
                     < div className="flex flex-col gap-2 px-4 items-center text-center">
                         <Dice4 onClick={roll} className="w-8 h-8 hover:cursor-pointer" />
@@ -91,12 +91,12 @@ export default function LuckyStock({ data }: { data: Stock[] }) {
                         <div className="flex flex-col gap-1">
 
                             <a target="_blank" href={`https://robinhood.com/us/en/stocks/${stock.symbol}`}>
-                                <button className="btn rounded-full btn-accent btn-xs mt-2">
+                                <button className="btn rounded-md btn-accent btn-xs mt-2">
                                     View on Robinhood
                                 </button>
                             </a>
 
-                            <button onClick={roll} className="btn rounded-full btn-secondary btn-xs mt-2">
+                            <button onClick={roll} className="btn rounded-md btn-secondary btn-xs mt-2">
                                 Roll again
                             </button>
 
