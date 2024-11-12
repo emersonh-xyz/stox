@@ -1,10 +1,8 @@
 'use client';
 
 import WatchList from "@/components/Widgets/WatchList";
-import { getAllStocks } from "../utility/finnhub";
 import WidgetAdder from "@/components/WidgetAdder";
 import { useEffect, useState } from "react";
-import { watchListDefaults } from "../config/defaults";
 import { getWidgets } from "../utility/widgets";
 
 export default function Dashboard({
@@ -35,6 +33,8 @@ export default function Dashboard({
     useEffect(() => {
         fetchStocksData();
         loadWidgets();
+
+
     }, [])
 
     useEffect(() => {
@@ -50,15 +50,17 @@ export default function Dashboard({
     }, []);
 
 
-
     useEffect(() => {
         console.log('widgets updated!')
     }, [widgets])
 
     if (!stocksData) {
         return (
-            <div className="flex items-center justify-center h-screen absolute inset-0">
-                <span className="loading loading-spinner text-primary"></span>
+            <div className="flex items-center flex-col justify-center h-screen absolute inset-0 text-center">
+                <div>
+                    <span className="loading loading-ball text-primary loading-lg"></span>
+                    <h1 className="text-2xl">Getting your stonks ready...</h1>
+                </div>
             </div>
         );
     }

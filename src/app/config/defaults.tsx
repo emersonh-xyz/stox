@@ -25,4 +25,11 @@ export const watchListDefaults = [
     }
 ]
 
+export const loadingMessages = [
+    "Stox to the moon! 🚀",
+    "Loading stonks...",
+    "Getting things ready...",
+    "Les stocks chargent...",
+];
+
 
