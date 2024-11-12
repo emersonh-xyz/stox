@@ -1,6 +1,6 @@
 'use client';
 
-import { OnbWelcomeCard } from "@/components/OnboardingCard";
+import { OnboardingCard, OnbWelcomeCard } from "@/components/OnboardingCard";
 import WidgetAdder from "@/components/WidgetAdder";
 import { UserButton } from "@clerk/nextjs"
 import { Home, Info, Newspaper, PlusCircleIcon, Settings, Users } from "lucide-react"
@@ -15,7 +15,7 @@ export default function RootLayout({
 }) {
 
 
-    const [isOnboarding, setIsOnboarding] = useState(false);
+    const [onboardingStage, setOnboardingStage] = useState('');
     const searchParams = useSearchParams()
     const onboarding = searchParams.get('onboarding')
 
@@ -23,7 +23,7 @@ export default function RootLayout({
         // get query params
 
         if (onboarding) {
-            setIsOnboarding(true);
+            setOnboardingStage(onboarding);
         }
 
         themeChange(false)
@@ -35,7 +35,12 @@ export default function RootLayout({
         <html lang="en" >
             <body>
                 <div className="flex flex-col h-screen overflow-hidden">
-                    {isOnboarding && <OnbWelcomeCard />}
+                    {onboardingStage === '1' && <OnbWelcomeCard />}
+                    {onboardingStage === '2' && <OnboardingCard
+                        title="Widget Adder"
+                        description="Meet the Widget Adder, a tool that lets you add widgets to your dashboard!"
+                        nextLink="/app?onboarding=3"
+                    />}
                     <div className="flex justify-between items-center w-full p-4 px-20 bg-base-300 shadow-md">
                         <div className="flex items-center gap-4">
                             <h1 className="text-5xl font-thin">S t o X.</h1>

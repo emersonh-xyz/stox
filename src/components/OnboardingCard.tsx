@@ -6,7 +6,6 @@ import {
     DialogDescription,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@/components/ui/dialog"
 import { ArrowRight } from "lucide-react"
 import { useState } from "react";
@@ -15,14 +14,11 @@ export function OnbWelcomeCard() {
 
     const [isOpen, setIsOpen] = useState(true);
 
-
-
-
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogContent >
                 <DialogHeader >
-                    <DialogTitle className="text-4xl text-center">Welcome to StoX</DialogTitle>
+                    <DialogTitle className="text-4xl text-center mb-2">Welcome to StoX</DialogTitle>
                     <DialogDescription className="text-md">
                         Get ready to take control of your financial future. Our site is designed to make stock markets fun for everyone,
                         whether you're a beginner or seasoned investor. With real-time market data, and community, you can make informed decisions with confidence.
@@ -31,29 +27,42 @@ export function OnbWelcomeCard() {
                     </DialogDescription>
                 </DialogHeader>
                 <div className="flex justify-between">
-                    <button className="btn btn-secondary">
+                    <button className="btn btn-sm btn-secondary">
                         Français <ArrowRight />
                     </button>
-                    <button className="btn btn-secondary">
-                        Next <ArrowRight />
-                    </button>
+                    <a href="/app?onboarding=2">
+                        <button className="btn btn-sm btn-secondary">
+                            Next <ArrowRight />
+                        </button>
+                    </a>
                 </div>
             </DialogContent>
         </Dialog>
     )
 }
 
-export function OnboardingCard({ title, description }: { title: string, description: string }) {
+export function OnboardingCard({ title, description, nextLink }: { title: string, description: string, nextLink: string }) {
+
+    const [isOpen, setIsOpen] = useState(true);
+
     return (
-        <Dialog open >
+        <Dialog open={isOpen} onOpenChange={setIsOpen} >
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Welcome to Stox</DialogTitle>
-                    <DialogDescription>
-                        This action cannot be undone. This will permanently delete your account
-                        and remove your data from our servers.
+                    <DialogTitle
+                        className="text-4xl text-center mb-2"
+                    >{title}</DialogTitle>
+                    <DialogDescription className="text-md">
+                        {description}
                     </DialogDescription>
                 </DialogHeader>
+                <div className="flex justify-end">
+                    <a href="/app?onboarding=2">
+                        <button className="btn btn-sm btn-secondary">
+                            Next <ArrowRight />
+                        </button>
+                    </a>
+                </div>
             </DialogContent>
         </Dialog>
     )
