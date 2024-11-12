@@ -9,7 +9,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className="overflow-hidden">
+        <body>
           {children}
         </body>
       </html>
