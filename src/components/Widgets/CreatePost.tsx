@@ -10,7 +10,6 @@ export default function CreatePost() {
                     <label>Description</label>
                     <input className="bg-base-100 p-2 rounded-2xl" placeholder="Enter a description" />
                     <button className="bg-primary text-white rounded-3xl p-2">Create a Post</button>
-
                 </div>
             </div>
         </div>
