@@ -6,16 +6,7 @@ import { Timer } from "lucide-react";
 import { useState, useCallback, useEffect, useRef } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { watchListDefaults } from "@/app/config/defaults";
-
-type Stock = {
-    currency?: string,
-    description: string,
-    displaySymbol?: string,
-    figi?: string,
-    symbol: string,
-    type?: string,
-    quote?: any,
-}
+import { fetchStockQuote, Stock } from "@/app/utility/widgets";
 
 export default function WatchList({ data }: { data: Stock[] | undefined }) {
 
@@ -43,14 +34,6 @@ export default function WatchList({ data }: { data: Stock[] | undefined }) {
         }
     };
 
-    const fetchStockQuote = async (symbol: string) => {
-        const res = await fetch(`/api/finnhub/quote`, {
-            method: 'POST',
-            body: JSON.stringify({ symbol }),
-        })
-        const data = await res.json()
-        return data;
-    }
 
     const filteredStocks = data?.filter(stock =>
         stock.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
