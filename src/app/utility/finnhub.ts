@@ -16,3 +16,11 @@ export async function getStockQuote(symbol: string) {
         .catch(err => console.log(err))
 }
 
+export async function getMarketStatus() {
+    const apiKey = process.env.FINNHUB_API_KEY
+    const url = `https://finnhub.io/api/v1/market-status/?token=${apiKey}&exchange=US`
+    return fetch(url)
+        .then(res => res.json())
+        .then(data => data)
+        .catch(err => console.log(err))
+}
