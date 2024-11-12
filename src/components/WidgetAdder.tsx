@@ -1,5 +1,6 @@
 'use client';
 
+import { toggleWidget } from "@/app/utility/widgets";
 import { PlusCircleIcon } from "lucide-react";
 import { useState } from "react";
 
@@ -11,8 +12,12 @@ export default function WidgetAdder() {
             <div className="absolute mt-8 left-0 transform -translate-x-full w-96 h-48 bg-base-300 animate-in px-2">
                 <div className="flex flex-col gap-2">
                     <h1>social feed</h1>
-                    <h1>watch list</h1>
-                    <h1>lucky stock</h1>
+                    <h1
+                        onClick={() => toggleWidget(0)}
+                    >watch list</h1>
+                    <h1
+                        onClick={() => toggleWidget(1)}
+                    >lucky stock</h1>
                 </div>
             </div>
         );

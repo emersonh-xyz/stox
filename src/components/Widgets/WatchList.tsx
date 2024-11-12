@@ -5,44 +5,25 @@ import { GearIcon } from "@radix-ui/react-icons";
 import { Timer } from "lucide-react";
 import { useState, useCallback, useEffect, useRef } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { watchListDefaults } from "@/app/config/defaults";
 
 type Stock = {
-    currency: string,
+    currency?: string,
     description: string,
-    displaySymbol: string,
-    figi: string,
+    displaySymbol?: string,
+    figi?: string,
     symbol: string,
-    type: string,
+    type?: string,
     quote?: any,
 }
 
-export default function WatchList({ stocks }: { stocks: Stock[] }) {
+export default function WatchList({ data }: { data: Stock[] | undefined }) {
 
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedStocks, setSelectedStocks] = useState<Stock[]>([]);
     const [refreshTimer, setRefreshTimer] = useState(30);
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
-    useEffect(() => {
-        intervalRef.current = setInterval(() => {
-            refreshQuotes();
-        }, 30000);
-
-        return () => {
-            if (intervalRef.current) {
-                clearInterval(intervalRef.current);
-            }
-        };
-    }, [selectedStocks]);
-
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setRefreshTimer(prev => prev > 0 ? prev - 1 : 30);
-        }, 1000);
-
-        return () => clearInterval(timer);
-    }, []);
 
     const refreshQuotes = async () => {
         const updatedStocks = await Promise.all(selectedStocks.map(async stock => {
@@ -71,10 +52,47 @@ export default function WatchList({ stocks }: { stocks: Stock[] }) {
         return data;
     }
 
-    const filteredStocks = stocks.filter(stock =>
+    const filteredStocks = data?.filter(stock =>
         stock.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
         stock.symbol.toLowerCase().includes(searchTerm.toLowerCase())
     ).slice(0, 5); // Limit to 5 stocks
+
+    useEffect(() => {
+        intervalRef.current = setInterval(() => {
+            refreshQuotes();
+        }, 30000);
+
+        if (selectedStocks.length >= 1) {
+            localStorage.setItem('watchList', JSON.stringify(selectedStocks));
+        }
+        // refreshQuotes();
+
+        return () => {
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+            }
+        };
+    }, [selectedStocks]);
+
+    useEffect(() => {
+        const watchList = localStorage.getItem('watchList');
+        if (watchList && watchList.length >= 1) {
+            console.log(watchList.length)
+            setSelectedStocks(JSON.parse(watchList));
+        } else {
+            setSelectedStocks(watchListDefaults);
+        }
+    }, []);
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setRefreshTimer(prev => prev > 0 ? prev - 1 : 30);
+        }, 1000);
+
+        return () => clearInterval(timer);
+
+    }, []);
+
 
     function SettingsMenu() {
         return (
@@ -82,7 +100,7 @@ export default function WatchList({ stocks }: { stocks: Stock[] }) {
                 <h1 className=" text-lg">Configure your Watch List</h1>
                 <SearchBar />
                 <div>
-                    {filteredStocks.map(stock => (
+                    {filteredStocks?.map(stock => (
                         <div
                             onClick={() => handleSelectStock(stock)}
                             key={stock.symbol}
@@ -155,7 +173,7 @@ export default function WatchList({ stocks }: { stocks: Stock[] }) {
 
                             <div className="px-4 w-1/2 text-right">
                                 <div className="flex items-center gap-1 text-md justify-end">
-                                    <h2 className="truncate drop-shadow-md">${stock.quote?.c.toLocaleString()}</h2>
+                                    <h2 className="truncate drop-shadow-md">${stock.quote?.c?.toLocaleString()}</h2>
                                 </div>
                                 <div className="flex items-center justify-end gap-2 text-xs">
                                     <p className={percentChange >= 0 ? 'text-primary drop-shadow-md' : 'text-secondary drop-shadow-md'}>
