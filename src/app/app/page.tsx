@@ -4,6 +4,7 @@ import WatchList from "@/components/Widgets/WatchList";
 import WidgetAdder from "@/components/WidgetAdder";
 import { useEffect, useState } from "react";
 import { getWidgets } from "../utility/widgets";
+import LuckyStock from "@/components/Widgets/LuckyStock";
 
 export default function Dashboard({
     params,
@@ -33,7 +34,6 @@ export default function Dashboard({
     useEffect(() => {
         fetchStocksData();
         loadWidgets();
-
 
     }, [])
 
@@ -67,9 +67,9 @@ export default function Dashboard({
 
     return (
         <div className="flex justify-between ">
-            <div className="grid grid-cols-1 gap-20 md:grid-cols-2 lg:grid-cols-3 ">
-
+            <div className="grid grid-cols-2 gap-12 md:grid-cols-3 lg:grid-cols-3 ">
                 {widgets[0] && <WatchList data={stocksData} />}
+                {widgets[1] && <LuckyStock data={stocksData} />}
 
             </div>
             <div className="px-24">
