@@ -14,7 +14,6 @@ export default function RootLayout({
     children: React.ReactNode
 }) {
 
-
     const [onboardingStage, setOnboardingStage] = useState('');
     const searchParams = useSearchParams()
     const onboarding = searchParams.get('onboarding')

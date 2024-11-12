@@ -15,3 +15,4 @@ export async function getStockQuote(symbol: string) {
         .then(data => data)
         .catch(err => console.log(err))
 }
+
