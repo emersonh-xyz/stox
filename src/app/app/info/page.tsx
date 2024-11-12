@@ -85,13 +85,13 @@ export default function AboutPage() {
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
           {[
             { name: "Josh Lytle", role: "CEO & Founder" },
-            { name: "Grace Villar-Matamoros", role: "CTO"},
+            { name: "Grace Villar-Matamoros", role: "CTO" },
             { name: "Devyansh Tailor", role: "Head of Product" },
             { name: "Emerson Hicks", role: "Lead Developer" },
           ].map((member) => (
             <div key={member.name} className="flex items-center space-x-3">
               <Avatar className="h-10 w-10">
-                <AvatarImage src={member.image} alt={member.name} />
+                <AvatarImage src={''} alt={member.name} />
                 <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
               </Avatar>
               <div>
