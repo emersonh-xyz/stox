@@ -32,7 +32,6 @@ export default function SettingsPage() {
         <div>
             <h1>{translations[language].themeSelector}</h1>
             <select data-choose-theme>
-                <option value="oj">OJ</option>
                 <option value="light">Light</option>
                 <option value="dark">Dark</option>
                 <option value="cyberpunk">Cyberpunk</option>
@@ -50,8 +49,6 @@ export default function SettingsPage() {
             <select value={language} onChange={handleLanguageChange}>
                 <option value="English">English</option>
                 <option value="French">French</option>
-                <option value="business">Business</option>
-                <option value="halloween">Halloween</option>
             </select>
         </div>
     );
