@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader } from "../ui/card";
 import { useState, useEffect } from "react";
 import { GearIcon } from "@radix-ui/react-icons";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { motion } from 'framer-motion'; // Import Framer Motion
 
 export type CompanyNews = {
     category: string;
@@ -16,7 +17,7 @@ export type CompanyNews = {
     source: string;
     summary: string;
     url: string;
-}
+};
 
 export default function CompanyNews({ data }: { data: Stock[] }) {
 
@@ -32,7 +33,7 @@ export default function CompanyNews({ data }: { data: Stock[] }) {
             if (news && news.length > 0) {
                 setCurrentNewsIndex((prevIndex) => (prevIndex + 1) % news.length);
             }
-        }, 5000);
+        }, 15000);
 
         return () => clearInterval(interval);
     }, [news]);
@@ -77,7 +78,7 @@ export default function CompanyNews({ data }: { data: Stock[] }) {
             headers: {
                 'Content-Type': 'application/json'
             }
-        })
+        });
 
         return data.json();
     }
@@ -92,7 +93,7 @@ export default function CompanyNews({ data }: { data: Stock[] }) {
                         {filteredStocks?.map((s: Stock) => (
                             <div
                                 onClick={() => {
-                                    handleSelectStock(s)
+                                    handleSelectStock(s);
                                 }}
                                 key={s.symbol}
                                 className={`flex items-center gap-2 p-2 border-b border-base-100 hover:cursor-pointer hover:border-primary ${s.symbol === stock?.symbol ? 'underline text-primary' : ''}`}
@@ -111,16 +112,13 @@ export default function CompanyNews({ data }: { data: Stock[] }) {
             <div className="flex items-center justify-between">
                 <div className="flex flex-col gap-1">
                     <h1 className="font-bold text-2xl">Company News</h1>
-                    <div className="flex items-center justify-between">
-                        {/* <button onClick={refreshQuotes} className="btn btn-primary">Refresh Now</button> */}
-                    </div>
+                    <div className="flex items-center justify-between"></div>
                 </div>
                 <div className="relative">
                     <GearIcon
                         onClick={() => setIsSettingsOpen(!isSettingsOpen)}
                         className="w-6 h-6 hover:cursor-pointer"
                     />
-
                     {isSettingsOpen && <SettingsMenu />}
                 </div>
             </div>
@@ -139,26 +137,29 @@ export default function CompanyNews({ data }: { data: Stock[] }) {
                                 <h2 className="text-xs text-base-content truncate overflow-hidden text-ellipsis">{stock ? stock.symbol : 'Select a stock to view news'}</h2>
                             </div>
                         </div>
-                        {/* <p>${stock?.quote?.c}</p> */}
                     </div>
-
                 </CardHeader>
                 <CardContent>
                     {news && news.length > 0 &&
-                        <div className="flex flex-col gap-2 animate-in justify-between py-2">
+                        <motion.div
+                            key={currentNewsIndex} // A unique key ensures each new news item is animated separately
+                            initial={{ opacity: 0, y: 20 }} // Animation starts with opacity 0 and slight translation
+                            animate={{ opacity: 1, y: 0 }} // Animates to visible and no translation
+                            exit={{ opacity: 0, y: -20 }} // Exit animation goes back to opacity 0 and upward translation
+                            transition={{ duration: 0.5 }} // Transition time for the animations
+                            className="flex flex-col gap-2 animate-in justify-between py-2"
+                        >
                             <div className="">
                                 <img className="object-cover rounded-md" src={news[currentNewsIndex].image || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQpZaeWxczipxrTdSIThz5hmwrRYhEeeAl5A&s'} alt={news[currentNewsIndex].headline} />
                                 <h1 className="font-bold text-md truncate">{news[currentNewsIndex].headline}</h1>
-                                {/* <p>{news[currentNewsIndex].summary}</p> */}
                                 <div>
                                     <a href={news[currentNewsIndex].url} target="_blank" rel="noreferrer" className="text-primary">Read more</a>
                                 </div>
                             </div>
-                        </div>
-
+                        </motion.div>
                     }
                 </CardContent>
             </Card>
-        </div >
-    )
+        </div>
+    );
 }
