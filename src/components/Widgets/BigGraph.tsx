@@ -84,8 +84,8 @@ export default function BigGraph({ data }: { data: Stock[] }) {
     };
 
     const chartData = [
-        { month: "", price: stock?.quote?.l },
-        { month: "", price: stock?.quote?.h },
+        { month: "low", price: stock?.quote?.l },
+        { month: "high", price: stock?.quote?.h },
     ]
     const chartConfig = {
         desktop: {
@@ -152,7 +152,7 @@ export default function BigGraph({ data }: { data: Stock[] }) {
                                     </>
                                 ) : stock?.quote?.dp < 0 ? (
                                     <>
-                                        Down by<span className="text-accent ">{stock?.quote?.dp}%</span> today <TrendingUp className="h-4 w-4 transform rotate-180" />
+                                        Down by<span className="text-primary ">{stock?.quote?.dp}%</span> today <TrendingUp className="h-4 w-4 transform rotate-180" />
                                     </>
                                 ) : <p>No change in trend at this moment</p>}
                             </div>

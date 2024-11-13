@@ -161,12 +161,16 @@ export default function WatchList({ data }: { data: Stock[] | undefined }) {
 
                             <div className="px-4 w-1/2 text-right">
                                 <div className="flex items-center gap-1 text-md justify-end">
-                                    <h2 className="truncate drop-shadow-md">${stock.quote?.c?.toLocaleString()}</h2>
+                                    {stock.quote?.c &&
+                                        <h2 className="truncate drop-shadow-md">${stock.quote?.c?.toLocaleString()}</h2>
+                                    }
                                 </div>
                                 <div className="flex items-center justify-end gap-2 text-xs">
-                                    <p className={percentChange >= 0 ? 'text-primary drop-shadow-md' : 'text-accent drop-shadow-md'}>
-                                        {percentChange >= 0 ? '+' : ''}{percentChange.toFixed(2)}%
-                                    </p>
+                                    {!percentChange ? <p className="text-primary drop-shadow-md loading loading-infinity">0.00%</p> :
+                                        <p className={percentChange >= 0 ? 'text-primary drop-shadow-md' : 'text-accent drop-shadow-md'}>
+                                            {percentChange >= 0 ? '+' : ''}{percentChange.toFixed(2)}%
+                                        </p>
+                                    }
                                 </div>
                             </div>
                         </div>

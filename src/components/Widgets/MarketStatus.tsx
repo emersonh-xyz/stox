@@ -1,6 +1,7 @@
 'use client';
 
 import { Stock } from "@/app/utility/widgets";
+import { TimerIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
 type Status = {
@@ -35,8 +36,9 @@ export default function MarketStatus() {
                 <div className="flex flex-col gap-1">
                     {/* <label>Market Status</label> */}
                     <div className="flex flex-col items-center gap-2">
-                        <span className="text-primary">Market: {status?.isOpen ? 'Open' : 'Closed'} </span>
-                        <span className="text-primary">Time: {status ? new Date(status.t * 1000).toLocaleTimeString() : ''}</span>
+                        <span className="text-primary font-bold">Market: {status?.isOpen ? 'Open' : 'Closed'} </span>
+
+                        <span className="text-primary font-bold flex items-center gap-1"><TimerIcon className="w-5" /> {status ? new Date(status.t * 1000).toLocaleTimeString() : ''}</span>
                         {/* <span className="text-primary">Time: {status?.time}</span> */}
                     </div>
                 </div>
