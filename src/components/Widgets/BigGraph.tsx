@@ -2,7 +2,7 @@
 
 import { fetchStockQuote, Stock } from "@/app/utility/widgets";
 import { useEffect, useRef, useState } from "react";
-import { Timer, TrendingUp } from "lucide-react"
+import { Settings2, Timer, TrendingUp } from "lucide-react"
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts"
 import {
     Card,
@@ -219,9 +219,9 @@ export default function BigGraph({ data }: { data: Stock[] }) {
 
                 </div>
                 <div className="relative">
-                    <GearIcon
+                    <Settings2
                         onClick={() => setIsSettingsOpen(!isSettingsOpen)}
-                        className="w-6 h-6 hover:cursor-pointer"
+                        className="w-5 h-5 hover:cursor-pointer text-base-content"
                     />
 
                     {isSettingsOpen && <SettingsMenu />}

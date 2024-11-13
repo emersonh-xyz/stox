@@ -2,7 +2,7 @@
 
 import { getStockQuote } from "@/app/utility/finnhub";
 import { GearIcon } from "@radix-ui/react-icons";
-import { Timer } from "lucide-react";
+import { Settings2, Timer } from "lucide-react";
 import { useState, useCallback, useEffect, useRef } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { watchListDefaults } from "@/app/config/defaults";
@@ -123,17 +123,15 @@ export default function WatchList({ data }: { data: Stock[] | undefined }) {
     return (
         <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between">
-                <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-2">
+                    {refreshTimer < 15 && <div className="loading-infinity loading-sm loading text-primary" />}
                     <h1 className="font-bold text-2xl">Watch List</h1>
-                    <div className="flex items-center justify-between">
-                        {/* <button onClick={refreshQuotes} className="btn btn-primary">Refresh Now</button> */}
-                        <span className="text-xs flex items-center gap-1"> <Timer className="w-3 h-3" /> Next refresh in: {refreshTimer}s</span>
-                    </div>
+                    {/* <button onClick={refreshQuotes} className="btn btn-primary">Refresh Now</button> */}
                 </div>
                 <div className="relative">
-                    <GearIcon
+                    <Settings2
                         onClick={() => setIsSettingsOpen(!isSettingsOpen)}
-                        className="w-6 h-6 hover:cursor-pointer"
+                        className="w-5 h-5 hover:cursor-pointer text-base-content"
                     />
 
                     {isSettingsOpen && <SettingsMenu />}

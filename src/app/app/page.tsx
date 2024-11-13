@@ -8,6 +8,7 @@ import LuckyStock from "@/components/Widgets/LuckyStock";
 import BigGraph from "@/components/Widgets/BigGraph";
 import MarketStatus from "@/components/Widgets/MarketStatus";
 import CompanyNews from "@/components/Widgets/CompanyNews";
+import SocialFeed from "@/components/Widgets/SocialFeed";
 
 export default function Dashboard({
     params,
@@ -70,9 +71,10 @@ export default function Dashboard({
 
     return (
         <div className="flex justify-between ">
-            <div className="grid grid-cols-2 gap-12 md:grid-cols-3 lg:grid-cols-4 px-2 custom-scrollbar">
+            <div className="grid grid-cols-2 gap-12 md:grid-cols-3 lg:grid-cols-3 px-2 custom-scrollbar">
                 {widgets[0] && <WatchList data={stocksData} />}
                 {widgets[2] && <BigGraph data={stocksData} />}
+                {widgets[5] && <SocialFeed data={stocksData} />}
                 {widgets[4] && <CompanyNews data={stocksData} />}
                 {widgets[3] && <MarketStatus />}
                 {widgets[1] && <LuckyStock data={stocksData} />}

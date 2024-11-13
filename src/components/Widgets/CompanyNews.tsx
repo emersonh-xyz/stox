@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { GearIcon } from "@radix-ui/react-icons";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { motion } from 'framer-motion'; // Import Framer Motion
+import { Settings2 } from "lucide-react";
 
 export type CompanyNews = {
     category: string;
@@ -75,9 +76,7 @@ export default function CompanyNews({ data }: { data: Stock[] }) {
                 from: '2024-10-01',
                 to: '2024-11-13'
             }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
+
         });
 
         return data.json();
@@ -115,9 +114,9 @@ export default function CompanyNews({ data }: { data: Stock[] }) {
                     <div className="flex items-center justify-between"></div>
                 </div>
                 <div className="relative">
-                    <GearIcon
+                    <Settings2
                         onClick={() => setIsSettingsOpen(!isSettingsOpen)}
-                        className="w-6 h-6 hover:cursor-pointer"
+                        className="w-5 h-5 hover:cursor-pointer text-base-content"
                     />
                     {isSettingsOpen && <SettingsMenu />}
                 </div>
@@ -152,6 +151,7 @@ export default function CompanyNews({ data }: { data: Stock[] }) {
                             <div className="">
                                 <img className="object-cover rounded-md" src={news[currentNewsIndex].image || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQpZaeWxczipxrTdSIThz5hmwrRYhEeeAl5A&s'} alt={news[currentNewsIndex].headline} />
                                 <h1 className="font-bold text-md truncate">{news[currentNewsIndex].headline}</h1>
+                                <h2 className="text-xs text-base-content truncate">{news[currentNewsIndex].summary}</h2>
                                 <div>
                                     <a href={news[currentNewsIndex].url} target="_blank" rel="noreferrer" className="text-primary">Read more</a>
                                 </div>
