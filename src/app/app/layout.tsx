@@ -58,7 +58,7 @@ export default function RootLayout({
                         </div>
                     </div>
 
-                    <div className="flex justify-between ">
+                    <div className="flex justify-between h-[750px] ">
                         <div className="py-14 px-2 m-12 rounded-full bg-base-300 drop-shadow-md shadow-md flex items-center ">
                             <ul className="flex flex-col items-center gap-12">
                                 <a href="/app">
