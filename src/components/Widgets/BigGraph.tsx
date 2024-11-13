@@ -1,8 +1,8 @@
 'use client';
 
 import { fetchStockQuote, Stock } from "@/app/utility/widgets";
-import { useEffect, useState } from "react";
-import { TrendingUp } from "lucide-react"
+import { useEffect, useRef, useState } from "react";
+import { Timer, TrendingUp } from "lucide-react"
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts"
 import {
     Card,
@@ -27,6 +27,50 @@ export default function BigGraph({ data }: { data: Stock[] }) {
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [refreshTimer, setRefreshTimer] = useState(30);
+    const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+    useEffect(() => {
+        const savedStock = localStorage.getItem('biggraph');
+        if (savedStock) {
+            setStock(JSON.parse(savedStock));
+        } else {
+            const defaultStock = data.find(stock => stock.symbol === 'TSLA');
+            if (defaultStock) {
+                handleSelectStock(defaultStock);
+            }
+        }
+    }, [data]);
+
+    useEffect(() => {
+
+
+        if (stock) {
+
+            intervalRef.current = setInterval(() => {
+                handleSelectStock(stock);
+            }, 30000);
+
+            localStorage.setItem('biggraph', JSON.stringify(stock));
+        }
+
+        return () => {
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+            }
+        };
+    }, [stock]);
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setRefreshTimer(prev => prev > 0 ? prev - 1 : 30);
+        }, 1000);
+
+        return () => clearInterval(timer);
+
+    }, []);
+
+
 
     function SearchBar() {
         return (
@@ -102,8 +146,10 @@ export default function BigGraph({ data }: { data: Stock[] }) {
                 <div className="flex flex-col gap-4">
                     <div className="flex flex-col gap-1">
                         <h1 className="font-bold text-2xl">Graph View</h1>
+                        {/* <span className="text-xs flex items-center gap-1"> <Timer className="w-3 h-3" /> Next refresh in: {refreshTimer}s</span> */}
+
                     </div>
-                    <Card className="bg-base-300 border-none rounded-md">
+                    <Card className="bg-base-300 border-none rounded-md w-fit">
                         <CardHeader>
                             <div className="flex flex-col gap-1">
                                 <div className="flex gap-2 items-center">
@@ -114,7 +160,7 @@ export default function BigGraph({ data }: { data: Stock[] }) {
                                         </Avatar>
                                     }
                                     <div className="flex flex-col">
-                                        <h1 className="font-bold text-xl truncate max-w-xs" style={{ maxWidth: '200px' }}>{stock ? stock.description : 'No Stock Selected'}</h1>
+                                        <h1 className="font-bold text-xl truncate max-w-md" style={{ maxWidth: '250px' }}>{stock ? stock.description : 'No Stock Selected'}</h1>
                                         <h2>{stock ? stock.symbol : ''} </h2>
                                     </div>
                                 </div>
