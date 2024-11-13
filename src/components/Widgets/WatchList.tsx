@@ -15,6 +15,7 @@ export default function WatchList({ data }: { data: Stock[] | undefined }) {
     const [selectedStocks, setSelectedStocks] = useState<Stock[]>([]);
     const [refreshTimer, setRefreshTimer] = useState(30);
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const refreshQuotes = async () => {
         const updatedStocks = await Promise.all(selectedStocks.map(async stock => {
@@ -26,12 +27,14 @@ export default function WatchList({ data }: { data: Stock[] | undefined }) {
     };
 
     const handleSelectStock = async (stock: Stock) => {
+        setIsLoading(true);
         if (selectedStocks.some(s => s.symbol === stock.symbol)) {
             setSelectedStocks(selectedStocks.filter(s => s.symbol !== stock.symbol));
         } else if (selectedStocks.length < 5) {
             const quote = await fetchStockQuote(stock.symbol);
             setSelectedStocks([...selectedStocks, { ...stock, quote }]);
         }
+        setIsLoading(false);
     };
 
 
@@ -82,18 +85,20 @@ export default function WatchList({ data }: { data: Stock[] | undefined }) {
             <div className="absolute flex gap-4 flex-col mt-8 left-72 transform -translate-x-full min-w-96 py-4 bg-base-200 px-4 rounded-2xl drop-shadow-2xl border-primary border-1 z-10">
                 <h1 className=" text-lg">Configure your Watch List</h1>
                 <SearchBar />
-                <div>
-                    {filteredStocks?.map(stock => (
-                        <div
-                            onClick={() => handleSelectStock(stock)}
-                            key={stock.symbol}
-                            className={`flex items-center gap-2 p-2 border-b border-base-100 hover:cursor-pointer hover:border-primary ${selectedStocks.some(s => s.symbol === stock.symbol) ? 'underline text-primary' : ''}`}
-                        >
-                            {/* <img src={stock.icon} alt={stock.symbol} className="w-6 h-6" /> */}
-                            <span>{stock.symbol} ({stock.description})</span>
-                        </div>
-                    ))}
-                </div>
+                {isLoading ? <span className="loading loading-lg"></span> :
+                    <div>
+                        {filteredStocks?.map(stock => (
+                            <div
+                                onClick={() => handleSelectStock(stock)}
+                                key={stock.symbol}
+                                className={`flex items-center gap-2 p-2 border-b border-base-100 hover:cursor-pointer hover:border-primary ${selectedStocks.some(s => s.symbol === stock.symbol) ? 'underline text-primary' : ''}`}
+                            >
+                                {/* <img src={stock.icon} alt={stock.symbol} className="w-6 h-6" /> */}
+                                <span>{stock.symbol} ({stock.description})</span>
+                            </div>
+                        ))}
+                    </div>
+                }
             </div>
         );
     }
