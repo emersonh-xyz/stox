@@ -72,9 +72,8 @@ export default function Dashboard({
             <div className="grid grid-cols-2 gap-12 md:grid-cols-3 lg:grid-cols-3 ">
                 {widgets[0] && <WatchList data={stocksData} />}
                 {widgets[1] && <LuckyStock data={stocksData} />}
-                {widgets[2] && <BigGraph />}
+                {widgets[2] && <BigGraph data={stocksData} />}
                 {widgets[3] && <MarketStatus />}
-
             </div>
             <div className="px-24">
                 <WidgetAdder />
