@@ -7,6 +7,7 @@ import { getWidgets } from "../utility/widgets";
 import LuckyStock from "@/components/Widgets/LuckyStock";
 import BigGraph from "@/components/Widgets/BigGraph";
 import MarketStatus from "@/components/Widgets/MarketStatus";
+import CompanyNews from "@/components/Widgets/CompanyNews";
 
 export default function Dashboard({
     params,
@@ -69,11 +70,12 @@ export default function Dashboard({
 
     return (
         <div className="flex justify-between ">
-            <div className="grid grid-cols-2 gap-12 md:grid-cols-3 lg:grid-cols-4 ">
+            <div className="grid grid-cols-2 gap-12 md:grid-cols-3 lg:grid-cols-4 px-2 custom-scrollbar">
                 {widgets[0] && <WatchList data={stocksData} />}
                 {widgets[1] && <LuckyStock data={stocksData} />}
                 {widgets[2] && <BigGraph data={stocksData} />}
                 {widgets[3] && <MarketStatus />}
+                {widgets[4] && <CompanyNews data={stocksData} />}
             </div>
             <div className="px-24">
                 <WidgetAdder />
