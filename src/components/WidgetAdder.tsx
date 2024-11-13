@@ -23,6 +23,10 @@ export default function WidgetAdder() {
                     <h1
                         onClick={() => toggleWidget(3)}
                     >market status</h1>
+                    <h1
+                        onClick={() => toggleWidget(4)}>
+                        company news
+                    </h1>
                 </div>
             </div>
         );
