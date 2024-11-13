@@ -69,7 +69,7 @@ export default function Dashboard({
 
     return (
         <div className="flex justify-between ">
-            <div className="grid grid-cols-2 gap-12 md:grid-cols-3 lg:grid-cols-3 ">
+            <div className="grid grid-cols-2 gap-12 md:grid-cols-3 lg:grid-cols-4 ">
                 {widgets[0] && <WatchList data={stocksData} />}
                 {widgets[1] && <LuckyStock data={stocksData} />}
                 {widgets[2] && <BigGraph data={stocksData} />}
