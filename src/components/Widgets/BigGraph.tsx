@@ -19,6 +19,7 @@ import {
     ChartTooltipContent,
 } from "@/components/ui/chart"
 import { GearIcon } from "@radix-ui/react-icons";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export default function BigGraph({ data }: { data: Stock[] }) {
 
@@ -105,9 +106,17 @@ export default function BigGraph({ data }: { data: Stock[] }) {
                     <Card className="bg-base-300 border-none rounded-md">
                         <CardHeader>
                             <div className="flex flex-col gap-1">
-                                <div className="flex gap-1 items-center">
-                                    <h1 className="font-bold text-2xl">{stock ? stock.description : 'No Stock Selected'}</h1>
-                                    <h2>{stock ? stock.symbol : ''} </h2>
+                                <div className="flex gap-2 items-center">
+                                    {stock &&
+                                        <Avatar>
+                                            <AvatarImage src={`https://assets.parqet.com/logos/symbol/${stock?.symbol}`} />
+                                            <AvatarFallback className="bg-base-100">{stock?.symbol}{stock?.symbol[stock?.symbol.length - 1]}</AvatarFallback>
+                                        </Avatar>
+                                    }
+                                    <div className="flex flex-col">
+                                        <h1 className="font-bold text-xl truncate max-w-xs" style={{ maxWidth: '200px' }}>{stock ? stock.description : 'No Stock Selected'}</h1>
+                                        <h2>{stock ? stock.symbol : ''} </h2>
+                                    </div>
                                 </div>
                                 <p>${stock?.quote?.c}</p>
                             </div>
