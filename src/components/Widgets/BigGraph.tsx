@@ -18,22 +18,58 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart"
+import { GearIcon } from "@radix-ui/react-icons";
 
-export default function BigGraph() {
+export default function BigGraph({ data }: { data: Stock[] }) {
 
     const [stock, setStock] = useState<Stock>();
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
 
-    const sampleStock: Stock = {
-        symbol: 'AAPL',
-        description: 'Apple Inc.',
+    function SearchBar() {
+        return (
+            <input
+                key={'search'}
+                type="text"
+                autoFocus={true}
+                placeholder="Search stocks..."
+                value={searchTerm}
+                onChange={(e) => {
+                    setSearchTerm(e.target.value);
+                    e.preventDefault();
+                }}
+                className="input input-bordered w-full max-w-xs"
+            />
+        );
     }
 
+    const filteredStocks = data?.filter(stock =>
+        stock.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        stock.symbol.toLowerCase().includes(searchTerm.toLowerCase())
+    ).slice(0, 5); // Limit to 5 stocks
 
-    useEffect(() => {
-        handleUpdateStock(sampleStock);
-    }, [])
+    function SettingsMenu() {
+        return (
+            <div className="absolute flex gap-4 flex-col mt-8 left-72 transform -translate-x-full min-w-96 py-4 bg-base-200 px-4 rounded-2xl drop-shadow-2xl border-primary border-1 z-10">
+                <h1 className=" text-lg">Configure your Watch List</h1>
+                <SearchBar />
+                <div>
+                    {filteredStocks?.map(s => (
+                        <div
+                            onClick={() => handleSelectStock(s)}
+                            key={s.symbol}
+                            className={`flex items-center gap-2 p-2 border-b border-base-100 hover:cursor-pointer hover:border-primary ${s.symbol === stock?.symbol ? 'underline text-primary' : ''}`}
+                        >
+                            {/* <img src={stock.icon} alt={stock.symbol} className="w-6 h-6" /> */}
+                            <span>{s.symbol} ({s.description})</span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    }
 
-    const handleUpdateStock = async (stock: Stock) => {
+    const handleSelectStock = async (stock: Stock) => {
         const quote = await fetchStockQuote(stock.symbol);
         setStock({ ...stock, quote });
     };
@@ -52,7 +88,7 @@ export default function BigGraph() {
 
     return (
         <div className="flex flex-col gap-4">
-            <div className="flex items-center justify-between">
+            <div className="flex items-start justify-between">
                 <div className="flex flex-col gap-4">
                     <div className="flex flex-col gap-1">
                         <h1 className="font-bold text-2xl">Graph View</h1>
@@ -103,11 +139,11 @@ export default function BigGraph() {
                             <div className="flex gap-1 font-medium leading-none">
                                 {stock?.quote.dp > 0 ? (
                                     <>
-                                        Trending up by<span className="text-primary ">%{stock?.quote.dp}</span> today <TrendingUp className="h-4 w-4" />
+                                        Up by<span className="text-primary ">{stock?.quote.dp}%</span> today <TrendingUp className="h-4 w-4" />
                                     </>
                                 ) : stock?.quote.dp < 0 ? (
                                     <>
-                                        Trending down by<span className="text-accent ">%{stock?.quote.dp}</span> today <TrendingUp className="h-4 w-4 transform rotate-180" />
+                                        Down by<span className="text-accent ">{stock?.quote.dp}%</span> today <TrendingUp className="h-4 w-4 transform rotate-180" />
                                     </>
                                 ) : <p>No change in trend at this moment</p>}
                             </div>
@@ -117,6 +153,14 @@ export default function BigGraph() {
                         </CardFooter>
                     </Card>
 
+                </div>
+                <div className="relative">
+                    <GearIcon
+                        onClick={() => setIsSettingsOpen(!isSettingsOpen)}
+                        className="w-6 h-6 hover:cursor-pointer"
+                    />
+
+                    {isSettingsOpen && <SettingsMenu />}
                 </div>
             </div>
         </div>
