@@ -25,6 +25,7 @@ export default function BigGraph({ data }: { data: Stock[] }) {
     const [stock, setStock] = useState<Stock>();
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     function SearchBar() {
         return (
@@ -51,32 +52,40 @@ export default function BigGraph({ data }: { data: Stock[] }) {
     function SettingsMenu() {
         return (
             <div className="absolute flex gap-4 flex-col mt-8 left-72 transform -translate-x-full min-w-96 py-4 bg-base-200 px-4 rounded-2xl drop-shadow-2xl border-primary border-1 z-10">
-                <h1 className=" text-lg">Configure your Watch List</h1>
+                <h1 className=" text-lg">Configure your Graph</h1>
                 <SearchBar />
-                <div>
-                    {filteredStocks?.map(s => (
-                        <div
-                            onClick={() => handleSelectStock(s)}
-                            key={s.symbol}
-                            className={`flex items-center gap-2 p-2 border-b border-base-100 hover:cursor-pointer hover:border-primary ${s.symbol === stock?.symbol ? 'underline text-primary' : ''}`}
-                        >
-                            {/* <img src={stock.icon} alt={stock.symbol} className="w-6 h-6" /> */}
-                            <span>{s.symbol} ({s.description})</span>
-                        </div>
-                    ))}
-                </div>
+                {isLoading ? <span className="loading loading-lg"></span>
+                    :
+                    <div>
+                        {filteredStocks?.map(s => (
+                            <div
+                                onClick={() => {
+                                    handleSelectStock(s)
+                                }}
+                                key={s.symbol}
+                                className={`flex items-center gap-2 p-2 border-b border-base-100 hover:cursor-pointer hover:border-primary ${s.symbol === stock?.symbol ? 'underline text-primary' : ''}`}
+                            >
+                                {/* <img src={stock.icon} alt={stock.symbol} className="w-6 h-6" /> */}
+                                <span>{s.symbol} ({s.description})</span>
+                            </div>
+                        ))}
+                    </div>
+                }
             </div>
         );
     }
 
     const handleSelectStock = async (stock: Stock) => {
-        const quote = await fetchStockQuote(stock.symbol);
+        setIsLoading(true);
+        const quote = await fetchStockQuote(stock.symbol)
+
+        setIsLoading(false)
         setStock({ ...stock, quote });
     };
 
     const chartData = [
-        { month: "", price: stock?.quote.l },
-        { month: "", price: stock?.quote.h },
+        { month: "", price: stock?.quote?.l },
+        { month: "", price: stock?.quote?.h },
     ]
     const chartConfig = {
         desktop: {
@@ -100,7 +109,7 @@ export default function BigGraph({ data }: { data: Stock[] }) {
                                     <h1 className="font-bold text-2xl">{stock ? stock.description : 'No Stock Selected'}</h1>
                                     <h2>{stock ? stock.symbol : ''} </h2>
                                 </div>
-                                <p>${stock?.quote.c}</p>
+                                <p>${stock?.quote?.c}</p>
                             </div>
                         </CardHeader>
                         <CardContent>
@@ -137,13 +146,13 @@ export default function BigGraph({ data }: { data: Stock[] }) {
                         </CardContent>
                         <CardFooter className="flex-col items-start gap-2 text-sm">
                             <div className="flex gap-1 font-medium leading-none">
-                                {stock?.quote.dp > 0 ? (
+                                {stock?.quote?.dp > 0 ? (
                                     <>
-                                        Up by<span className="text-primary ">{stock?.quote.dp}%</span> today <TrendingUp className="h-4 w-4" />
+                                        Up by<span className="text-primary ">{stock?.quote?.dp}%</span> today <TrendingUp className="h-4 w-4" />
                                     </>
-                                ) : stock?.quote.dp < 0 ? (
+                                ) : stock?.quote?.dp < 0 ? (
                                     <>
-                                        Down by<span className="text-accent ">{stock?.quote.dp}%</span> today <TrendingUp className="h-4 w-4 transform rotate-180" />
+                                        Down by<span className="text-accent ">{stock?.quote?.dp}%</span> today <TrendingUp className="h-4 w-4 transform rotate-180" />
                                     </>
                                 ) : <p>No change in trend at this moment</p>}
                             </div>
