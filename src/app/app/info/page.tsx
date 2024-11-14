@@ -8,14 +8,14 @@ export default function AboutPage() {
     <div className="w-full mx-auto max-w-screen-lg px-4 py-8 min-h-screen overflow-y-auto">
       <header className="text-center mb-8">
         <Rocket className="h-10 w-10 text-primary mx-auto mb-3" />
-        <h1 className="text-3xl font-bold mb-2">About MoonstoX</h1>
+        <h1 className="text-3xl font-bold mb-2">About StoX</h1>
         <p className="text-lg text-muted-foreground">Blast off to Intelligent Stock Market Investing or Whatever</p>
       </header>
 
       <section className="mb-8">
         <h2 className="text-xl font-semibold mb-3">Our Mission</h2>
         <p className="text-base">
-          At MoonstoX, we're on a mission to democratize stock market investing. We believe that everyone should have
+          At StoX, we're on a mission to democratize stock market investing. We believe that everyone should have
           access to the tools and information needed to make informed investment decisions. Our app combines technology with user-friendly design to empower both novice and experienced investors.
         </p>
       </section>
@@ -107,14 +107,14 @@ export default function AboutPage() {
         <h2 className="text-xl font-semibold mb-4">Frequently Asked Questions</h2>
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="item-1">
-            <AccordionTrigger>Is MoonstoX suitable for beginners?</AccordionTrigger>
+            <AccordionTrigger>Is StoX suitable for beginners?</AccordionTrigger>
             <AccordionContent>
-              Yes, Moonstox is designed to be user-friendly for both beginners and experienced investors. We offer
+              Yes, StoX is designed to be user-friendly for both beginners and experienced investors. We offer
               comprehensive educational resources and an intuitive interface to help newcomers get started.
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="item-3">
-            <AccordionTrigger>Is my data safe with MoonstoX?</AccordionTrigger>
+            <AccordionTrigger>Is my data safe with StoX?</AccordionTrigger>
             <AccordionContent>
               Absolutely. We employ security measures to protect your data and investments. This includes
               encryption, secure servers, and regular security audits to ensure your information remains safe.
@@ -124,7 +124,7 @@ export default function AboutPage() {
       </section>
 
       <footer className="text-center text-xs text-muted-foreground">
-        <p>© 2024 Moonstox. All rights reserved.</p>
+        <p>© 2024 StoX. All rights reserved.</p>
       </footer>
     </div>
   )
