@@ -33,8 +33,6 @@ export default function RootLayout({
             toggleWidget(2);
             toggleWidget(3);
             toggleWidget(4);
-
-
         }
 
         themeChange(false)

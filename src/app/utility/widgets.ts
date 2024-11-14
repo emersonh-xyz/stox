@@ -20,7 +20,6 @@ export async function getWidgets() {
     return JSON.parse(localStorage.getItem('components') || '[]');
 }
 
-
 export const fetchStockQuote = async (symbol: string) => {
     const res = await fetch(`/api/finnhub/quote`, {
         method: 'POST',

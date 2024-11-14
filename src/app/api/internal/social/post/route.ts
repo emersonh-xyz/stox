@@ -19,9 +19,7 @@ export async function POST(req: Request) {
         authorName
     });
 
-
     return new Response(JSON.stringify(post));
-
 }
 
 export async function GET(req: Request) {

@@ -14,12 +14,20 @@ export type SocialData = {
     dislikes: number;
 }
 
+export type User = {
+    id: string;
+    username: string;
+    firstName: string;
+    lastName: string;
+    imageUrl: string;
+}
+
 export default function SocialPage() {
 
     const [stocksData, setStocksData] = useState<Stock[]>([]);
 
     const [language, setLanguage] = useState('en');
-    const [users, setUsers] = useState([]);
+    const [users, setUsers] = useState<User[]>([]);
 
     useEffect(() => {
         const fetchStocksData = async () => {
