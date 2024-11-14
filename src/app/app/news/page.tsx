@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import './NewsPage.css';
+import { getLocaleLanguage } from "@/app/utility/language";
 
 // Define the structure for a news item
 interface NewsItem {
@@ -16,21 +17,25 @@ interface NewsItem {
 export default function NewsPage() {
     const [newsData, setNewsData] = useState<NewsItem[]>([]);
     const [error, setError] = useState<boolean>(false);
+    const [language, setLanguage] = useState('en');
+
+    useEffect(() => {
+        setLanguage(getLocaleLanguage());
+    }, []);
 
     useEffect(() => {
         const fetchNews = async () => {
             try {
-                // Fetch news data from Finnhub API
                 const response = await fetch(
                     `https://finnhub.io/api/v1/news?category=general&token=${process.env.NEXT_PUBLIC_FINNHUB_API_KEY}`
                 );
 
-                const data = await response.json();
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
 
-                // Limit to only the first 18 items
+                const data = await response.json();
+
                 if (data) {
                     const formattedNewsData = data.slice(0, 18).map((article: any, index: number) => ({
                         id: `${index}`,
@@ -56,9 +61,11 @@ export default function NewsPage() {
 
     return (
         <div className="news-page">
-            <h1 className="news-title">News</h1>
+            <h1 className="news-title">
+                {language === 'fr' ? 'Les Nouvelles' : 'News'}
+            </h1>
             {error ? (
-                <p>Error loading news, please try again later.</p>
+                <p>{language === 'fr' ? 'Erreur lors du chargement des actualités, veuillez réessayer plus tard.' : 'Error loading news, please try again later.'}</p>
             ) : (
                 <div className="news-container">
                     {newsData.map((news) => (
