@@ -31,7 +31,6 @@ export default function SettingsPage() {
                     <div className="flex gap-20 items-center ">
                         <h1>{language === 'fr' ? 'Thème' : 'Theme'}</h1>
                         <select className="select bg-base-300 " data-choose-theme>
-                            <option value="oj">OJ</option>
                             <option value="light">Light</option>
                             <option value="dark">Dark</option>
                             <option value="cyberpunk">Cyberpunk</option>
