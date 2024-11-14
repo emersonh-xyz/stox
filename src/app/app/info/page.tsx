@@ -1,11 +1,11 @@
-import { BarChart3, Globe, Rocket, Smartphone, Zap, Users, Shield, BookOpen } from "lucide-react"
+import { BarChart3, Globe, Rocket, Smartphone, Zap, Shield, BookOpen } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 
 export default function AboutPage() {
   return (
-    <div className="container mx-auto px-4 py-8 min-h-screen overflow-y-auto">
+    <div className="w-full mx-auto max-w-screen-lg px-4 py-8 min-h-screen overflow-y-auto">
       <header className="text-center mb-8">
         <Rocket className="h-10 w-10 text-primary mx-auto mb-3" />
         <h1 className="text-3xl font-bold mb-2">About MoonstoX</h1>
@@ -56,7 +56,7 @@ export default function AboutPage() {
               <CardTitle>User Friendly Design</CardTitle>
             </CardHeader>
             <CardContent>
-              Enjoy a seamless experience on any device with our responsive, well optimized and customizable interface.
+              Enjoy a seamless experience on any device with our responsive, well-optimized, and customizable interface.
             </CardContent>
           </Card>
           <Card>
@@ -110,7 +110,7 @@ export default function AboutPage() {
             <AccordionTrigger>Is MoonstoX suitable for beginners?</AccordionTrigger>
             <AccordionContent>
               Yes, Moonstox is designed to be user-friendly for both beginners and experienced investors. We offer
-              comprehensive educational resources and a intuitive interface to help newcomers get started.
+              comprehensive educational resources and an intuitive interface to help newcomers get started.
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="item-3">
