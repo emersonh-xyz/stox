@@ -20,7 +20,7 @@ export type CompanyNews = {
     url: string;
 };
 
-export default function CompanyNews({ data }: { data: Stock[] }) {
+export default function CompanyNews({ data, lang }: { data: Stock[], lang: string }) {
 
     const [stock, setStock] = useState<Stock>();
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -45,7 +45,7 @@ export default function CompanyNews({ data }: { data: Stock[] }) {
                 key={'search'}
                 type="text"
                 autoFocus={true}
-                placeholder="Search stocks..."
+                placeholder={lang === 'en' ? 'Search for a stock' : 'Rechercher une action'}
                 value={searchTerm}
                 onChange={(e) => {
                     setSearchTerm(e.target.value);
@@ -85,7 +85,9 @@ export default function CompanyNews({ data }: { data: Stock[] }) {
     function SettingsMenu() {
         return (
             <div className="absolute flex gap-4 flex-col mt-8 left-72 transform -translate-x-full min-w-96 py-4 bg-base-200 px-4 rounded-2xl drop-shadow-2xl border-primary border-1 z-10">
-                <h1 className=" text-lg">Configure your News source</h1>
+                <h1 className=" text-lg">
+                    {lang === 'en' ? 'Configure your News source' : 'Configurez votre source de nouvelles'}
+                </h1>
                 <SearchBar />
                 {isLoading ? <span className="loading loading-lg"></span> : (
                     <div>
@@ -110,7 +112,9 @@ export default function CompanyNews({ data }: { data: Stock[] }) {
         <div className="flex flex-col gap-3 ">
             <div className="flex items-center justify-between">
                 <div className="flex flex-col gap-1">
-                    <h1 className="font-bold text-2xl">Company News</h1>
+                    <h1 className="font-bold text-2xl">
+                        {lang === 'en' ? 'Company News' : 'Nouvelles de l\'entreprise'}
+                    </h1>
                     <div className="flex items-center justify-between"></div>
                 </div>
                 <div className="relative">
@@ -121,7 +125,7 @@ export default function CompanyNews({ data }: { data: Stock[] }) {
                     {isSettingsOpen && <SettingsMenu />}
                 </div>
             </div>
-            <Card className="bg-base-300 border-none rounded-md">
+            <Card className="bg-base-300 border-none rounded-3xl">
                 <CardHeader>
                     <div className="flex flex-col gap-1">
                         <div className="flex gap-2 items-center">
@@ -132,8 +136,12 @@ export default function CompanyNews({ data }: { data: Stock[] }) {
                                 </Avatar>
                             }
                             <div className="flex flex-col max-w-xs overflow-hidden">
-                                <h1 className="font-bold text-xl truncate overflow-hidden text-ellipsis">{stock ? stock.description : 'No Stock Selected'}</h1>
-                                <h2 className="text-xs text-base-content truncate overflow-hidden text-ellipsis">{stock ? stock.symbol : 'Select a stock to view news'}</h2>
+                                <h1 className="font-bold text-xl truncate overflow-hidden text-ellipsis">{stock ? stock.description :
+                                    lang === 'en' ? 'Select a stock to view news' : 'Sélectionnez une action pour voir les nouvelles'
+                                }</h1>
+                                <h2 className="text-xs text-base-content truncate overflow-hidden text-ellipsis">{stock ? stock.symbol :
+                                    lang === 'en' ? 'Select a stock to view news' : 'Sélectionnez une action pour voir les nouvelles'
+                                }</h2>
                             </div>
                         </div>
                     </div>

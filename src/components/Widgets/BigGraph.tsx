@@ -21,7 +21,7 @@ import {
 import { GearIcon } from "@radix-ui/react-icons";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
-export default function BigGraph({ data }: { data: Stock[] }) {
+export default function BigGraph({ data, lang }: { data: Stock[], lang: string }) {
 
     const [stock, setStock] = useState<Stock>();
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -78,7 +78,7 @@ export default function BigGraph({ data }: { data: Stock[] }) {
                 key={'search'}
                 type="text"
                 autoFocus={true}
-                placeholder="Search stocks..."
+                placeholder={lang === 'en' ? "Search stocks..." : "Rechercher des actions..."}
                 value={searchTerm}
                 onChange={(e) => {
                     setSearchTerm(e.target.value);
@@ -97,7 +97,9 @@ export default function BigGraph({ data }: { data: Stock[] }) {
     function SettingsMenu() {
         return (
             <div className="absolute flex gap-4 flex-col mt-8 left-72 transform -translate-x-full min-w-96 py-4 bg-base-200 px-4 rounded-2xl drop-shadow-2xl border-primary border-1 z-10">
-                <h1 className=" text-lg">Configure your Graph</h1>
+                <h1 className=" text-lg">
+                    {lang === 'en' ? "Select your stock" : "Sélectionnez votre action"}
+                </h1>
                 <SearchBar />
                 {isLoading ? <span className="loading loading-lg"></span>
                     :
@@ -107,8 +109,8 @@ export default function BigGraph({ data }: { data: Stock[] }) {
                                 onClick={() => {
                                     handleSelectStock(s)
                                 }}
-                                key={s.symbol}
-                                className={`flex items-center gap-2 p-2 border-b border-base-100 hover:cursor-pointer hover:border-primary ${s.symbol === stock?.symbol ? 'underline text-primary' : ''}`}
+                                key={s.symbol} className={`flex items-center gap-2 p-2 border-b border-base-100 hover:cursor-pointer hover:border-primary ${s.symbol === stock?.symbol ? 'underline text-primary' : ''}`}
+
                             >
                                 {/* <img src={stock.icon} alt={stock.symbol} className="w-6 h-6" /> */}
                                 <span>{s.symbol} ({s.description})</span>
@@ -145,11 +147,13 @@ export default function BigGraph({ data }: { data: Stock[] }) {
             <div className="flex items-start justify-between">
                 <div className="flex flex-col gap-4">
                     <div className="flex flex-col gap-1">
-                        <h1 className="font-bold text-2xl">Graph View</h1>
+                        <h1 className="font-bold text-2xl">
+                            {lang === 'en' ? "Big Graph" : "Grand Graphique"}
+                        </h1>
                         {/* <span className="text-xs flex items-center gap-1"> <Timer className="w-3 h-3" /> Next refresh in: {refreshTimer}s</span> */}
 
                     </div>
-                    <Card className="bg-base-300 border-none rounded-md w-fit">
+                    <Card className="bg-base-300 border-none rounded-3xl w-fit">
                         <CardHeader>
                             <div className="flex flex-col gap-1">
                                 <div className="flex gap-2 items-center">
@@ -203,13 +207,17 @@ export default function BigGraph({ data }: { data: Stock[] }) {
                             <div className="flex gap-1 font-medium leading-none">
                                 {stock?.quote?.dp > 0 ? (
                                     <>
-                                        Up by<span className="text-primary ">{stock?.quote?.dp}%</span> today <TrendingUp className="h-4 w-4" />
+                                        {lang === 'en' ? 'Up by' : 'En hausse de'} <span className="text-primary ">{stock?.quote?.dp}%</span> {lang === 'en' ? 'today' : 'aujourd\'hui'} <TrendingUp className="h-4 w-4 transform rotate-180" />
                                     </>
                                 ) : stock?.quote?.dp < 0 ? (
                                     <>
-                                        Down by<span className="text-primary ">{stock?.quote?.dp}%</span> today <TrendingUp className="h-4 w-4 transform rotate-180" />
+                                        {lang === 'en' ? 'Down by' : 'En baisse de'} <span className="text-accent">{stock?.quote?.dp}%</span> {lang === 'en' ? 'today' : 'aujourd\'hui'} <TrendingUp className="h-4 w-4" />
                                     </>
-                                ) : <p>No change in trend at this moment</p>}
+                                ) :
+                                    <p>
+                                        {lang === 'en' ? 'No change in price today' : 'Pas de changement de prix aujourd\'hui'}
+                                    </p>
+                                }
                             </div>
                             <div className="leading-none text-muted-foreground">
                                 {/* Showing total visitors for the last 6 months */}
