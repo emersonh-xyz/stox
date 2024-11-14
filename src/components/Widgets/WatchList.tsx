@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { watchListDefaults } from "@/app/config/defaults";
 import { fetchStockQuote, Stock } from "@/app/utility/widgets";
 
-export default function WatchList({ data }: { data: Stock[] | undefined }) {
+export default function WatchList({ data, lang }: { data: Stock[] | undefined, lang: string }) {
 
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
@@ -83,7 +83,9 @@ export default function WatchList({ data }: { data: Stock[] | undefined }) {
     function SettingsMenu() {
         return (
             <div className="absolute flex gap-4 flex-col mt-8 left-72 transform -translate-x-full min-w-96 py-4 bg-base-200 px-4 rounded-2xl drop-shadow-2xl border-primary border-1 z-10">
-                <h1 className=" text-lg">Configure your Watch List</h1>
+                <h1 className="text-lg">
+                    {lang === 'fr' ? 'Configurer votre liste de surveillance' : 'Configure your Watch List'}
+                </h1>
                 <SearchBar />
                 {isLoading ? <span className="loading loading-lg"></span> :
                     <div>
@@ -109,7 +111,7 @@ export default function WatchList({ data }: { data: Stock[] | undefined }) {
                 key={'search'}
                 type="text"
                 autoFocus={true}
-                placeholder="Search stocks..."
+                placeholder={lang === 'fr' ? 'Rechercher des actions...' : 'Search stocks...'}
                 value={searchTerm}
                 onChange={(e) => {
                     setSearchTerm(e.target.value);
@@ -125,7 +127,9 @@ export default function WatchList({ data }: { data: Stock[] | undefined }) {
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                     {refreshTimer < 15 && <div className="loading-infinity loading-sm loading text-primary" />}
-                    <h1 className="font-bold text-2xl">Watch List</h1>
+                    <h1 className="font-bold text-2xl">
+                        {lang === 'fr' ? 'Liste de surveillance' : 'Watch List'}
+                    </h1>
                     {/* <button onClick={refreshQuotes} className="btn btn-primary">Refresh Now</button> */}
                 </div>
                 <div className="relative">

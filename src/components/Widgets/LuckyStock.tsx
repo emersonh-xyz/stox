@@ -5,7 +5,7 @@ import { Dice1, Dice2, Dice4 } from "lucide-react";
 import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
-export default function LuckyStock({ data }: { data: Stock[] }) {
+export default function LuckyStock({ data, lang }: { data: Stock[], lang: string }) {
 
     const [rolling, setRolling] = useState(false);
     const [rollingText, setRollingText] = useState('');
@@ -56,13 +56,17 @@ export default function LuckyStock({ data }: { data: Stock[] }) {
 
     return (
         <div className="flex flex-col gap-4 animate-in w-full">
-            <h1 className="font-bold text-2xl">Lucky Stock</h1>
-            <div className="flex flex-col gap-2 bg-base-300 rounded-md p-4 w-full ">
+            <h1 className="font-bold text-2xl">
+                {lang === 'fr' ? 'Action chanceuse' : 'Lucky Stock'}
+            </h1>
+            <div className="flex flex-col gap-2 bg-base-300 rounded-3xl p-4 w-full ">
                 {!rolling && !stock &&
                     < div className="flex flex-col gap-2 px-4 items-center text-center">
                         <Dice4 onClick={roll} className="w-8 h-8 hover:cursor-pointer" />
                         <div className="flex flex-col">
-                            <h1 className="text-sm">Click the die to roll a lucky stock!</h1>
+                            <h1 className="text-sm">
+                                {lang === 'fr' ? 'Cliquez pour lancer le dé' : 'Click to roll the dice'}
+                            </h1>
                         </div>
                     </div>
                 }
@@ -72,7 +76,9 @@ export default function LuckyStock({ data }: { data: Stock[] }) {
                         <Dice4 className="w-12 h-12 hover:cursor-pointer animate-spin" />
                         <div className="flex flex-col">
                             <h1 className="font-bold text-xl">{rollingText}</h1>
-                            <h2 className="animate-pulse text-xs w-full">Determining your future investments... </h2>
+                            <h2 className="animate-pulse text-xs w-full">
+                                {lang === 'fr' ? 'Rouleau en cours...' : 'Rolling...'}
+                            </h2>
                         </div>
                     </div>
                 }
@@ -84,20 +90,24 @@ export default function LuckyStock({ data }: { data: Stock[] }) {
                             <AvatarFallback className="bg-base-100">{stock.symbol[0]}{stock.symbol[stock.symbol.length - 1]}</AvatarFallback>
                         </Avatar>
                         <div className="flex flex-col text-center">
-                            <h1 className="font-bold text-sm break-words">Your lucky stock is <br /><a target="_blank" href={`https://robinhood.com/us/en/stocks/${stock.symbol}`} className="text-primary text-xs animate-in underline">{stock.description}</a>!</h1>
-                            <h1 className="text-xs">Evaluated at <span className="font-bold text-success">${stock.quote.c}</span> a share</h1>
+                            <h1 className="font-bold text-sm break-words">
+                                {lang === 'fr' ? 'Vous avez de la chance!' : 'You got lucky!'}
+                                <br /><a target="_blank" href={`https://robinhood.com/us/en/stocks/${stock.symbol}`} className="text-primary text-xs animate-in underline">{stock.description}</a>!</h1>
+                            {lang === 'fr' ? <h1 className="text-xs">Évalué à <span className="font-bold text-success">${stock.quote.c}</span> par action</h1> :
+                                <h1 className="text-xs">Evaluated at <span className="font-bold text-success">${stock.quote.c}</span> a share</h1>
+                            }
                         </div>
 
                         <div className="flex flex-col gap-1">
 
                             <a target="_blank" href={`https://robinhood.com/us/en/stocks/${stock.symbol}`}>
                                 <button className="btn rounded-md btn-accent btn-xs mt-2">
-                                    View on Robinhood
+                                    {lang === 'fr' ? 'Voir sur Robinhood' : 'View on Robinhood'}
                                 </button>
                             </a>
 
                             <button onClick={roll} className="btn rounded-md btn-secondary btn-xs mt-2">
-                                Roll again
+                                {lang === 'fr' ? 'Rouler à nouveau' : 'Roll again'}
                             </button>
 
                         </div>

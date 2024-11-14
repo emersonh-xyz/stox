@@ -13,7 +13,7 @@ type PostExtended = Post & {
 }
 
 
-export default function SocialFeed({ data }: { data: Stock[] }) {
+export default function SocialFeed({ data, lang }: { data: Stock[], lang: string }) {
 
     const [postBody, setPostBody] = useState<string>('');
     const [posts, setPosts] = useState<PostExtended[]>([]);
@@ -87,8 +87,10 @@ export default function SocialFeed({ data }: { data: Stock[] }) {
 
     function SettingsMenu() {
         return (
-            <div className="absolute flex gap-4 flex-col mt-8 left-72 transform -translate-x-full min-w-96 py-4 bg-base-200 px-4 rounded-2xl drop-shadow-2xl border-primary border-1 z-30">
-                <h1 className=" text-lg">Select your stock</h1>
+            <div className="absolute flex gap-4 flex-col mt-8 left-72 transform -translate-x-full min-w-96 py-4 bg-base-200 px-4  drop-shadow-2xl border-primary border-1 z-30">
+                <h1 className=" text-lg">
+                    {lang === 'en' ? 'Configure your News source' : 'Configurez votre source de nouvelles'}
+                </h1>
                 <SearchBar />
                 {isLoading ? <span className="loading loading-lg"></span> :
                     <div>
@@ -114,7 +116,7 @@ export default function SocialFeed({ data }: { data: Stock[] }) {
                 key={'search'}
                 type="text"
                 autoFocus={true}
-                placeholder="Search stocks..."
+                placeholder={lang === 'en' ? "Search stocks..." : "Rechercher des actions..."}
                 value={searchTerm}
                 onChange={(e) => {
                     setSearchTerm(e.target.value);
@@ -126,20 +128,27 @@ export default function SocialFeed({ data }: { data: Stock[] }) {
     }
 
     return (
-        <div className="flex flex-col gap-4 w-96 rounded-lg ">
-            <h1 className="font-bold text-2xl">Social Feed</h1>
+        <div className="flex flex-col gap-4 w-96 ">
+            <h1 className="font-bold text-2xl">
+                {lang === 'en' ? 'Social Feed' : 'Flux social'}
+            </h1>
 
-            <div className="bg-base-300 flex flex-col gap-2 rounded-lg">
+            <div className="bg-base-300 flex flex-col gap-2 rounded-3xl">
                 <div className="p-4 gap-4 flex flex-col">
                     <div className="flex flex-col">
-                        <label>Create a new post</label>
-                        {postBody.length > 1 && !stock && <label className="text-sm text-warning">Please select a stock before posting</label>}
+                        <label>
+                            {lang === 'en' ? 'Create a post' : 'Créer un post'}
+                        </label>
+                        {postBody.length > 1 && !stock && <label className="text-sm text-warning">
+                            {lang === 'en' ? 'Please select a stock' : 'Veuillez sélectionner une action'}
+                        </label>}
                     </div>
                     <div className=" items-center relative">
                         <input
                             value={postBody}
                             onChange={(e) => setPostBody(e.target.value)}
-                            className="bg-base-100 p-2 rounded-lg pr-10 w-full" placeholder={`What's on your mind at ${stock?.symbol}?`}
+                            className="bg-base-100 p-2 rounded-lg pr-10 w-full"
+                            placeholder={lang === 'en' ? 'What are you thinking?' : 'À quoi penses-tu?'}
                         />
                         <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
                             <SmileIcon onClick={() => {
@@ -156,14 +165,20 @@ export default function SocialFeed({ data }: { data: Stock[] }) {
 
 
                         {postBody.length > 0 && stock ?
-                            <button onClick={createPost} className="btn-primary btn btn-sm">Create Post</button>
+                            <button onClick={createPost} className="btn-primary btn btn-sm">
+                                {lang === 'en' ? 'Create Post' : 'Créer un post'}
+                            </button>
                             :
-                            <button className="btn btn-sm btn-disabled">Create Post</button>
+                            <button className="btn btn-sm btn-disabled">
+                                {lang === 'en' ? 'Create Post' : 'Créer un post'}
+                            </button>
                         }
 
 
                         <button onClick={() => setIsSettingsOpen(!isSettingsOpen)} className=" btn-accent btn btn-sm">
-                            {!stock ? 'Select Stock' : `$${stock.symbol}`}
+                            {!stock ?
+                                lang === 'en' ? 'Select a stock' : 'Sélectionnez une action'
+                                : `$${stock.symbol}`}
                         </button>
                         <div className="relative">
                             {isSettingsOpen && <SettingsMenu />}

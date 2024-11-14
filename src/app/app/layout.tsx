@@ -78,7 +78,7 @@ export default function RootLayout({
                                 </a>
                             </ul >
                         </div >
-                        <div className="flex justify-center p-20 w-full">
+                        <div className="flex  p-20 w-full">
                             {children}
                         </div>
                     </div>

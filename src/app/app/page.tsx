@@ -9,6 +9,7 @@ import BigGraph from "@/components/Widgets/BigGraph";
 import MarketStatus from "@/components/Widgets/MarketStatus";
 import CompanyNews from "@/components/Widgets/CompanyNews";
 import SocialFeed from "@/components/Widgets/SocialFeed";
+import { getLocaleLanguage } from "../utility/language";
 
 export default function Dashboard({
     params,
@@ -20,6 +21,7 @@ export default function Dashboard({
 
     const [stocksData, setStocksData] = useState();
     const [widgets, setWidgets] = useState([]);
+    const [language, setLanguage] = useState('en');
 
     const fetchStocksData = async () => {
         const res = await fetch(`/api/internal/stocks`, {
@@ -35,9 +37,13 @@ export default function Dashboard({
     }
 
 
+
+
     useEffect(() => {
         fetchStocksData();
         loadWidgets();
+
+        setLanguage(getLocaleLanguage());
 
     }, [])
 
@@ -63,7 +69,9 @@ export default function Dashboard({
             <div className="flex items-center flex-col justify-center h-screen absolute inset-0 text-center">
                 <div>
                     <span className="loading loading-ball text-primary loading-lg"></span>
-                    <h1 className="text-2xl">Getting your stonks ready...</h1>
+                    <h1 className="text-2xl">
+                        {language === 'en' ? 'Getting your stonks ready...' : 'Préparez vos pierres..'}
+                    </h1>
                 </div>
             </div>
         );
@@ -72,12 +80,12 @@ export default function Dashboard({
     return (
         <div className="flex justify-between ">
             <div className="grid grid-cols-2 gap-12 md:grid-cols-3 lg:grid-cols-3 px-2 custom-scrollbar">
-                {widgets[0] && <WatchList data={stocksData} />}
-                {widgets[2] && <BigGraph data={stocksData} />}
-                {widgets[5] && <SocialFeed data={stocksData} />}
-                {widgets[4] && <CompanyNews data={stocksData} />}
-                {widgets[3] && <MarketStatus />}
-                {widgets[1] && <LuckyStock data={stocksData} />}
+                {widgets[0] && <WatchList lang={language} data={stocksData} />}
+                {widgets[2] && <BigGraph lang={language} data={stocksData} />}
+                {widgets[5] && <SocialFeed lang={language} data={stocksData} />}
+                {widgets[4] && <CompanyNews lang={language} data={stocksData} />}
+                {widgets[3] && <MarketStatus lang={language} />}
+                {widgets[1] && <LuckyStock lang={language} data={stocksData} />}
             </div>
             <div className="px-24">
                 <WidgetAdder />
