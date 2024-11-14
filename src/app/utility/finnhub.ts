@@ -25,3 +25,13 @@ export async function getMarketStatus() {
     console.log(data)
     return data
 }
+
+export async function getCompanyNews(from: string, to: string, symbol: string) {
+    const apiKey = process.env.FINNHUB_API_KEY
+    const url = `https://finnhub.io/api/v1/company-news?symbol=${encodeURIComponent(symbol)}&from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&token=${apiKey}`
+    console.log(url)
+    const res = await fetch(url)
+    const data = await res.json();
+
+    return data
+}

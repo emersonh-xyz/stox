@@ -1,17 +1,32 @@
 import prisma from "@/db";
 
-export async function createPost(
-    authorId: string,
+export async function createPost({
+    body,
+    authorId,
+    authorName,
+    avatarUrl,
+    symbol,
+}: {
     body: string,
+    authorId: string,
+    avatarUrl: string,
+    symbol: string,
+    authorName: string
+}
 ) {
 
     try {
-        await prisma.post.create({
+        return await prisma.post.create({
             data: {
                 authorId,
-                body
+                authorName,
+                avatarUrl,
+                body,
+                symbol,
             }
         })
+
+
 
     } catch (error) {
         console.log(`Error in createPost: ${error}`)
@@ -19,10 +34,8 @@ export async function createPost(
 
 }
 
-export async function updatePostVotes(
-    id: number,
-    upvotes: number,
-    downvotes: number
+export async function likePost(
+    id: string,
 ) {
 
     try {
@@ -31,8 +44,9 @@ export async function updatePostVotes(
                 id
             },
             data: {
-                upvotes,
-                downvotes
+                likes: {
+                    increment: 1
+                }
             }
         })
 
@@ -44,7 +58,11 @@ export async function updatePostVotes(
 
 export async function getPosts() {
     try {
-        const posts = await prisma.post.findMany()
+        const posts = await prisma.post.findMany({
+            include: {
+                Replies: true
+            }
+        })
 
         return posts
 
@@ -53,3 +71,35 @@ export async function getPosts() {
     }
 }
 
+export async function replyToPost(
+    { postId, body, authorId, avatarUrl, authorName }:
+        {
+            postId: string,
+            body: string,
+            authorId: string,
+            avatarUrl: string,
+            authorName: string
+        }
+) {
+    const post = await prisma.post.findUnique({
+        where: {
+            id: postId
+        }
+    })
+
+    if (!post) {
+        throw new Error('Post not found')
+    }
+
+    const reply = await prisma.reply.create({
+        data: {
+            postId: post.id,
+            avatarUrl: avatarUrl,
+            body: body,
+            authorId: authorId,
+            authorName: authorName
+        }
+    })
+
+    return reply
+}

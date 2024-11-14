@@ -1,12 +1,34 @@
 'use client';
 
 import NavBar from "@/components/NavBar";
-import { useEffect } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { motion, useSpring } from "framer-motion";
 import { SignInButton, SignUpButton } from "@clerk/nextjs";
 import Image from "next/image";
 
 export default function Home() {
+
+
+
+  const [stocks, setStocks] = useState(50123);
+  const [users, setUsers] = useState(9);
+  const [posts, setPosts] = useState(3);
+
+
+  const springStocks = useSpring(0, { bounce: 0, duration: 6000 });
+  const springUsers = useSpring(0, { bounce: 0, duration: 6000 });
+  const springPosts = useSpring(0, { bounce: 0, duration: 6000 });
+
+  useEffect(() => {
+    springStocks.on('change', (v) => setStocks(Math.round(v)));
+    springUsers.on('change', (v) => setUsers(Math.round(v)));
+    springPosts.on('change', (v) => setPosts(Math.round(v)));
+
+    springStocks.set(50123);
+    springUsers.set(9);
+    springPosts.set(3);
+  }, [springStocks, springUsers, springPosts]);
+
   useEffect(() => {
     const createStars = () => {
       const starContainer = document.getElementById("star-container");
@@ -35,31 +57,34 @@ export default function Home() {
       >
         <div className="flex flex-col gap-4">
           <div>
-            <h1 className="text-9xl font-bold text-left text-white">MoonstoX.</h1>
-            <p className="text-2xl text-white">we let you look at your stocks or something, who cares!</p>
+            <h1 className="text-9xl font-bold text-left text-white">StoX.</h1>
+            <p className="text-2xl text-white">we let you look at your stocks or something!</p>
           </div>
-          <div className="flex  flex-col gap-2">
+          <div className="flex flex-col gap-2 items-start ">
 
             <SignInButton>
-              <div className="container hover:cursor-pointer hover:scale-105 hover:animate-pulse">
-                <img
-                  className=""
-                  alt="star" width={200} height={200} src="https://images.vexels.com/content/283648/preview/pink-rounded-star-9619ee.png" />
-                <span className="centered font-bold text-zinc-600 text-2xl">Login</span>
-              </div>
+              <button className='btn  drop-shadow-none w-full text-lg'>Login</button>
             </SignInButton>
 
             <SignUpButton>
-              <div className="container-two hover:cursor-pointer hover:scale-105 hover:animate-pulse">
-                <img
-                  className=""
-                  alt="star" width={128} height={128} src="https://images.vexels.com/content/283648/preview/pink-rounded-star-9619ee.png" />
-                <span className="centered font-bold text-zinc-600 text-xl">Sign-up</span>
-              </div>
+              <button className='btn btn-primary w-full text-lg'>Sign-up</button>
+
             </SignUpButton>
           </div>
         </div>
 
+      </motion.div>
+
+      <motion.div
+        className="fixed right-[300px] top-[100px] w-[500px] p-4 rounded-lg text-right "
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2.5, duration: 1.5, ease: "easeOut" }}
+      >
+        <h2 className="tracking-tight drop-shadow-md max-w-5xl text-xl md:text-2xl lg:text-3xl text-gray-200">
+          Join <span className="font-bold text-[#FFA630]">{users}</span> other users
+          and pick from over <span className="font-bold text-[#FFA630]">{stocks}</span> different stocks!
+        </h2>
       </motion.div>
 
       <motion.img
@@ -70,7 +95,6 @@ export default function Home() {
         transition={{ type: 'spring', stiffness: 25, damping: 10, delay: 2 }}
         className="absolute h-[750px]"
       />
-
     </div>
   );
 }

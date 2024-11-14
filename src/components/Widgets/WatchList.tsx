@@ -2,19 +2,20 @@
 
 import { getStockQuote } from "@/app/utility/finnhub";
 import { GearIcon } from "@radix-ui/react-icons";
-import { Timer } from "lucide-react";
+import { Settings2, Timer } from "lucide-react";
 import { useState, useCallback, useEffect, useRef } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { watchListDefaults } from "@/app/config/defaults";
 import { fetchStockQuote, Stock } from "@/app/utility/widgets";
 
-export default function WatchList({ data }: { data: Stock[] | undefined }) {
+export default function WatchList({ data, lang }: { data: Stock[] | undefined, lang: string }) {
 
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedStocks, setSelectedStocks] = useState<Stock[]>([]);
     const [refreshTimer, setRefreshTimer] = useState(30);
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const refreshQuotes = async () => {
         const updatedStocks = await Promise.all(selectedStocks.map(async stock => {
@@ -26,12 +27,14 @@ export default function WatchList({ data }: { data: Stock[] | undefined }) {
     };
 
     const handleSelectStock = async (stock: Stock) => {
+        setIsLoading(true);
         if (selectedStocks.some(s => s.symbol === stock.symbol)) {
             setSelectedStocks(selectedStocks.filter(s => s.symbol !== stock.symbol));
         } else if (selectedStocks.length < 5) {
             const quote = await fetchStockQuote(stock.symbol);
             setSelectedStocks([...selectedStocks, { ...stock, quote }]);
         }
+        setIsLoading(false);
     };
 
 
@@ -80,20 +83,24 @@ export default function WatchList({ data }: { data: Stock[] | undefined }) {
     function SettingsMenu() {
         return (
             <div className="absolute flex gap-4 flex-col mt-8 left-72 transform -translate-x-full min-w-96 py-4 bg-base-200 px-4 rounded-2xl drop-shadow-2xl border-primary border-1 z-10">
-                <h1 className=" text-lg">Configure your Watch List</h1>
+                <h1 className="text-lg">
+                    {lang === 'fr' ? 'Configurer votre liste de surveillance' : 'Configure your Watch List'}
+                </h1>
                 <SearchBar />
-                <div>
-                    {filteredStocks?.map(stock => (
-                        <div
-                            onClick={() => handleSelectStock(stock)}
-                            key={stock.symbol}
-                            className={`flex items-center gap-2 p-2 border-b border-base-100 hover:cursor-pointer hover:border-primary ${selectedStocks.some(s => s.symbol === stock.symbol) ? 'underline text-primary' : ''}`}
-                        >
-                            {/* <img src={stock.icon} alt={stock.symbol} className="w-6 h-6" /> */}
-                            <span>{stock.symbol} ({stock.description})</span>
-                        </div>
-                    ))}
-                </div>
+                {isLoading ? <span className="loading loading-lg"></span> :
+                    <div>
+                        {filteredStocks?.map(stock => (
+                            <div
+                                onClick={() => handleSelectStock(stock)}
+                                key={stock.symbol}
+                                className={`flex items-center gap-2 p-2 border-b border-base-100 hover:cursor-pointer hover:border-primary ${selectedStocks.some(s => s.symbol === stock.symbol) ? 'underline text-primary' : ''}`}
+                            >
+                                {/* <img src={stock.icon} alt={stock.symbol} className="w-6 h-6" /> */}
+                                <span>{stock.symbol} ({stock.description})</span>
+                            </div>
+                        ))}
+                    </div>
+                }
             </div>
         );
     }
@@ -104,7 +111,7 @@ export default function WatchList({ data }: { data: Stock[] | undefined }) {
                 key={'search'}
                 type="text"
                 autoFocus={true}
-                placeholder="Search stocks..."
+                placeholder={lang === 'fr' ? 'Rechercher des actions...' : 'Search stocks...'}
                 value={searchTerm}
                 onChange={(e) => {
                     setSearchTerm(e.target.value);
@@ -118,17 +125,17 @@ export default function WatchList({ data }: { data: Stock[] | undefined }) {
     return (
         <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between">
-                <div className="flex flex-col gap-1">
-                    <h1 className="font-bold text-2xl">Watch List</h1>
-                    <div className="flex items-center justify-between">
-                        {/* <button onClick={refreshQuotes} className="btn btn-primary">Refresh Now</button> */}
-                        <span className="text-xs flex items-center gap-1"> <Timer className="w-3 h-3" /> Next refresh in: {refreshTimer}s</span>
-                    </div>
+                <div className="flex items-center gap-2">
+                    {refreshTimer < 15 && <div className="loading-infinity loading-sm loading text-primary" />}
+                    <h1 className="font-bold text-2xl">
+                        {lang === 'fr' ? 'Liste de surveillance' : 'Watch List'}
+                    </h1>
+                    {/* <button onClick={refreshQuotes} className="btn btn-primary">Refresh Now</button> */}
                 </div>
                 <div className="relative">
-                    <GearIcon
+                    <Settings2
                         onClick={() => setIsSettingsOpen(!isSettingsOpen)}
-                        className="w-6 h-6 hover:cursor-pointer"
+                        className="w-5 h-5 hover:cursor-pointer text-base-content"
                     />
 
                     {isSettingsOpen && <SettingsMenu />}
@@ -156,12 +163,16 @@ export default function WatchList({ data }: { data: Stock[] | undefined }) {
 
                             <div className="px-4 w-1/2 text-right">
                                 <div className="flex items-center gap-1 text-md justify-end">
-                                    <h2 className="truncate drop-shadow-md">${stock.quote?.c?.toLocaleString()}</h2>
+                                    {stock.quote?.c &&
+                                        <h2 className="truncate drop-shadow-md">${stock.quote?.c?.toLocaleString()}</h2>
+                                    }
                                 </div>
                                 <div className="flex items-center justify-end gap-2 text-xs">
-                                    <p className={percentChange >= 0 ? 'text-primary drop-shadow-md' : 'text-accent drop-shadow-md'}>
-                                        {percentChange >= 0 ? '+' : ''}{percentChange.toFixed(2)}%
-                                    </p>
+                                    {!percentChange ? <p className="text-primary drop-shadow-md loading loading-infinity">0.00%</p> :
+                                        <p className={percentChange >= 0 ? 'text-primary drop-shadow-md' : 'text-accent drop-shadow-md'}>
+                                            {percentChange >= 0 ? '+' : ''}{percentChange.toFixed(2)}%
+                                        </p>
+                                    }
                                 </div>
                             </div>
                         </div>

@@ -1,8 +1,8 @@
 'use client';
 
 import { fetchStockQuote, Stock } from "@/app/utility/widgets";
-import { useEffect, useState } from "react";
-import { TrendingUp } from "lucide-react"
+import { useEffect, useRef, useState } from "react";
+import { Settings2, Timer, TrendingUp } from "lucide-react"
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts"
 import {
     Card,
@@ -19,12 +19,58 @@ import {
     ChartTooltipContent,
 } from "@/components/ui/chart"
 import { GearIcon } from "@radix-ui/react-icons";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
-export default function BigGraph({ data }: { data: Stock[] }) {
+export default function BigGraph({ data, lang }: { data: Stock[], lang: string }) {
 
     const [stock, setStock] = useState<Stock>();
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const [refreshTimer, setRefreshTimer] = useState(30);
+    const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+    useEffect(() => {
+        const savedStock = localStorage.getItem('biggraph');
+        if (savedStock) {
+            setStock(JSON.parse(savedStock));
+        } else {
+            const defaultStock = data.find(stock => stock.symbol === 'TSLA');
+            if (defaultStock) {
+                handleSelectStock(defaultStock);
+            }
+        }
+    }, [data]);
+
+    useEffect(() => {
+
+
+        if (stock) {
+
+            intervalRef.current = setInterval(() => {
+                handleSelectStock(stock);
+            }, 30000);
+
+            localStorage.setItem('biggraph', JSON.stringify(stock));
+        }
+
+        return () => {
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+            }
+        };
+    }, [stock]);
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setRefreshTimer(prev => prev > 0 ? prev - 1 : 30);
+        }, 1000);
+
+        return () => clearInterval(timer);
+
+    }, []);
+
+
 
     function SearchBar() {
         return (
@@ -32,7 +78,7 @@ export default function BigGraph({ data }: { data: Stock[] }) {
                 key={'search'}
                 type="text"
                 autoFocus={true}
-                placeholder="Search stocks..."
+                placeholder={lang === 'en' ? "Search stocks..." : "Rechercher des actions..."}
                 value={searchTerm}
                 onChange={(e) => {
                     setSearchTerm(e.target.value);
@@ -51,32 +97,42 @@ export default function BigGraph({ data }: { data: Stock[] }) {
     function SettingsMenu() {
         return (
             <div className="absolute flex gap-4 flex-col mt-8 left-72 transform -translate-x-full min-w-96 py-4 bg-base-200 px-4 rounded-2xl drop-shadow-2xl border-primary border-1 z-10">
-                <h1 className=" text-lg">Configure your Watch List</h1>
+                <h1 className=" text-lg">
+                    {lang === 'en' ? "Select your stock" : "Sélectionnez votre action"}
+                </h1>
                 <SearchBar />
-                <div>
-                    {filteredStocks?.map(s => (
-                        <div
-                            onClick={() => handleSelectStock(s)}
-                            key={s.symbol}
-                            className={`flex items-center gap-2 p-2 border-b border-base-100 hover:cursor-pointer hover:border-primary ${s.symbol === stock?.symbol ? 'underline text-primary' : ''}`}
-                        >
-                            {/* <img src={stock.icon} alt={stock.symbol} className="w-6 h-6" /> */}
-                            <span>{s.symbol} ({s.description})</span>
-                        </div>
-                    ))}
-                </div>
+                {isLoading ? <span className="loading loading-lg"></span>
+                    :
+                    <div>
+                        {filteredStocks?.map(s => (
+                            <div
+                                onClick={() => {
+                                    handleSelectStock(s)
+                                }}
+                                key={s.symbol} className={`flex items-center gap-2 p-2 border-b border-base-100 hover:cursor-pointer hover:border-primary ${s.symbol === stock?.symbol ? 'underline text-primary' : ''}`}
+
+                            >
+                                {/* <img src={stock.icon} alt={stock.symbol} className="w-6 h-6" /> */}
+                                <span>{s.symbol} ({s.description})</span>
+                            </div>
+                        ))}
+                    </div>
+                }
             </div>
         );
     }
 
     const handleSelectStock = async (stock: Stock) => {
-        const quote = await fetchStockQuote(stock.symbol);
+        setIsLoading(true);
+        const quote = await fetchStockQuote(stock.symbol)
+
+        setIsLoading(false)
         setStock({ ...stock, quote });
     };
 
     const chartData = [
-        { month: "", price: stock?.quote.l },
-        { month: "", price: stock?.quote.h },
+        { month: "low", price: stock?.quote?.l },
+        { month: "high", price: stock?.quote?.h },
     ]
     const chartConfig = {
         desktop: {
@@ -91,16 +147,28 @@ export default function BigGraph({ data }: { data: Stock[] }) {
             <div className="flex items-start justify-between">
                 <div className="flex flex-col gap-4">
                     <div className="flex flex-col gap-1">
-                        <h1 className="font-bold text-2xl">Graph View</h1>
+                        <h1 className="font-bold text-2xl">
+                            {lang === 'en' ? "Big Graph" : "Grand Graphique"}
+                        </h1>
+                        {/* <span className="text-xs flex items-center gap-1"> <Timer className="w-3 h-3" /> Next refresh in: {refreshTimer}s</span> */}
+
                     </div>
-                    <Card className="bg-base-300 border-none rounded-md">
+                    <Card className="bg-base-300 border-none rounded-3xl w-fit">
                         <CardHeader>
                             <div className="flex flex-col gap-1">
-                                <div className="flex gap-1 items-center">
-                                    <h1 className="font-bold text-2xl">{stock ? stock.description : 'No Stock Selected'}</h1>
-                                    <h2>{stock ? stock.symbol : ''} </h2>
+                                <div className="flex gap-2 items-center">
+                                    {stock &&
+                                        <Avatar>
+                                            <AvatarImage src={`https://assets.parqet.com/logos/symbol/${stock?.symbol}`} />
+                                            <AvatarFallback className="bg-base-100">{stock?.symbol}{stock?.symbol[stock?.symbol.length - 1]}</AvatarFallback>
+                                        </Avatar>
+                                    }
+                                    <div className="flex flex-col">
+                                        <h1 className="font-bold text-xl truncate max-w-md" style={{ maxWidth: '250px' }}>{stock ? stock.description : 'No Stock Selected'}</h1>
+                                        <h2>{stock ? stock.symbol : ''} </h2>
+                                    </div>
                                 </div>
-                                <p>${stock?.quote.c}</p>
+                                <p>${stock?.quote?.c}</p>
                             </div>
                         </CardHeader>
                         <CardContent>
@@ -137,15 +205,19 @@ export default function BigGraph({ data }: { data: Stock[] }) {
                         </CardContent>
                         <CardFooter className="flex-col items-start gap-2 text-sm">
                             <div className="flex gap-1 font-medium leading-none">
-                                {stock?.quote.dp > 0 ? (
+                                {stock?.quote?.dp > 0 ? (
                                     <>
-                                        Up by<span className="text-primary ">{stock?.quote.dp}%</span> today <TrendingUp className="h-4 w-4" />
+                                        {lang === 'en' ? 'Up by' : 'En hausse de'} <span className="text-primary ">{stock?.quote?.dp}%</span> {lang === 'en' ? 'today' : 'aujourd\'hui'} <TrendingUp className="h-4 w-4 transform rotate-180" />
                                     </>
-                                ) : stock?.quote.dp < 0 ? (
+                                ) : stock?.quote?.dp < 0 ? (
                                     <>
-                                        Down by<span className="text-accent ">{stock?.quote.dp}%</span> today <TrendingUp className="h-4 w-4 transform rotate-180" />
+                                        {lang === 'en' ? 'Down by' : 'En baisse de'} <span className="text-accent">{stock?.quote?.dp}%</span> {lang === 'en' ? 'today' : 'aujourd\'hui'} <TrendingUp className="h-4 w-4" />
                                     </>
-                                ) : <p>No change in trend at this moment</p>}
+                                ) :
+                                    <p>
+                                        {lang === 'en' ? 'No change in price today' : 'Pas de changement de prix aujourd\'hui'}
+                                    </p>
+                                }
                             </div>
                             <div className="leading-none text-muted-foreground">
                                 {/* Showing total visitors for the last 6 months */}
@@ -155,9 +227,9 @@ export default function BigGraph({ data }: { data: Stock[] }) {
 
                 </div>
                 <div className="relative">
-                    <GearIcon
+                    <Settings2
                         onClick={() => setIsSettingsOpen(!isSettingsOpen)}
-                        className="w-6 h-6 hover:cursor-pointer"
+                        className="w-5 h-5 hover:cursor-pointer text-base-content"
                     />
 
                     {isSettingsOpen && <SettingsMenu />}
