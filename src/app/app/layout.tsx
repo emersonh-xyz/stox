@@ -7,6 +7,7 @@ import { Home, Info, Newspaper, PlusCircleIcon, Settings, Users } from "lucide-r
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { themeChange } from "theme-change";
+import { toggleWidget } from "../utility/widgets";
 
 export default function RootLayout({
     children,
@@ -24,6 +25,16 @@ export default function RootLayout({
 
         if (onboarding) {
             setOnboardingStage(onboarding);
+        }
+
+        if (onboarding === '1') {
+            toggleWidget(0);
+            toggleWidget(1);
+            toggleWidget(2);
+            toggleWidget(3);
+            toggleWidget(4);
+
+
         }
 
         themeChange(false)
