@@ -21,7 +21,7 @@ export default function WidgetAdder({ openWidget }: { openWidget: boolean }) {
 
     function Menu() {
         return (
-            <div className={`absolute mt-8 left-0 transform -translate-x-full w-96 h-48 bg-base-300 animate-in px-2 rounded-3xl
+            <div className={`z-50 absolute mt-8 left-0 transform -translate-x-full w-96 h-48  animate-in px-2 rounded-3xl
             ${openWidget && 'z-50'}`}>
                 <Card className="w-96 border-none bg-base-300">
                     <CardContent className="p-4">

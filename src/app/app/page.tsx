@@ -54,6 +54,7 @@ export default function Dashboard({
     }, [])
 
     useEffect(() => {
+
         const handleStorageChange = () => {
             loadWidgets();
         };
@@ -93,7 +94,7 @@ export default function Dashboard({
                 {widgets[3] && <MarketStatus lang={language} />}
                 {widgets[1] && <LuckyStock lang={language} data={stocksData} />}
             </div>
-            <div className="px-24">
+            <div className="px-24 absolute right-0">
                 <WidgetAdder openWidget={openWidget} />
             </div>
         </div>
