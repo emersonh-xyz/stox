@@ -10,18 +10,21 @@ import MarketStatus from "@/components/Widgets/MarketStatus";
 import CompanyNews from "@/components/Widgets/CompanyNews";
 import SocialFeed from "@/components/Widgets/SocialFeed";
 import { getLocaleLanguage } from "../utility/language";
+import { useSearchParams } from "next/navigation";
 
 export default function Dashboard({
     params,
-    searchParams,
 }: {
     params: Promise<{ slug: string }>
-    searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+
 }) {
 
     const [stocksData, setStocksData] = useState();
     const [widgets, setWidgets] = useState([]);
     const [language, setLanguage] = useState('en');
+    const searchParams = useSearchParams()
+
+    const [openWidget, setOpenWidget] = useState(false);
 
     const fetchStocksData = async () => {
         const res = await fetch(`/api/internal/stocks`, {
@@ -36,14 +39,17 @@ export default function Dashboard({
         setWidgets(toggledWidgets);
     }
 
-
-
+    const onboarding = searchParams.get('onboarding')
 
     useEffect(() => {
         fetchStocksData();
         loadWidgets();
 
         setLanguage(getLocaleLanguage());
+
+        if (onboarding === '2') {
+            setOpenWidget(true);
+        }
 
     }, [])
 
@@ -88,7 +94,7 @@ export default function Dashboard({
                 {widgets[1] && <LuckyStock lang={language} data={stocksData} />}
             </div>
             <div className="px-24">
-                <WidgetAdder />
+                <WidgetAdder openWidget={openWidget} />
             </div>
         </div>
     )

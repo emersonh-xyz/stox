@@ -8,8 +8,8 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 
 
-export default function WidgetAdder() {
-    const [isOpen, setIsOpen] = useState(false);
+export default function WidgetAdder({ openWidget }: { openWidget: boolean }) {
+    const [isOpen, setIsOpen] = useState(openWidget);
     const widgets = [
         { name: "Watch List", icon: Eye, index: 0 },
         { name: "Lucky Stock", icon: Sparkles, index: 1 },
@@ -21,7 +21,8 @@ export default function WidgetAdder() {
 
     function Menu() {
         return (
-            <div className="absolute mt-8 left-0 transform -translate-x-full w-96 h-48 bg-base-300 animate-in px-2 rounded-3xl z-30">
+            <div className={`absolute mt-8 left-0 transform -translate-x-full w-96 h-48 bg-base-300 animate-in px-2 rounded-3xl
+            ${openWidget && 'z-50'}`}>
                 <Card className="w-96 border-none bg-base-300">
                     <CardContent className="p-4">
                         <div className="grid grid-cols-2 gap-4">

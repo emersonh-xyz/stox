@@ -17,6 +17,7 @@ export default function RootLayout({
     const [onboardingStage, setOnboardingStage] = useState('');
     const searchParams = useSearchParams()
     const onboarding = searchParams.get('onboarding')
+    const [language, setLanguage] = useState('en');
 
     useEffect(() => {
         // get query params
@@ -30,15 +31,34 @@ export default function RootLayout({
 
     }, [onboarding])
 
+    useEffect(() => {
+        setLanguage(localStorage.getItem('language') || 'en');
+    }, [])
+
     return (
         <html lang="en" >
             <body>
                 <div className="flex flex-col ">
                     {onboardingStage === '1' && <OnbWelcomeCard />}
                     {onboardingStage === '2' && <OnboardingCard
-                        title="Widget Adder"
-                        description="Meet the Widget Adder, a tool that lets you add widgets to your dashboard!"
-                        nextLink="/app?onboarding=3"
+                        title={language === 'fr' ? "Ajouter un widget" : "Add a widget"}
+                        description={language === 'fr' ? "Ajoutez des widgets à votre tableau de bord pour suivre les stocks, les nouvelles et plus encore." : "Add widgets to your dashboard to track stocks, news, and more."}
+                        nextLink="/app/news?onboarding=3"
+                    />}
+                    {onboardingStage === '3' && <OnboardingCard
+                        title={language === 'fr' ? "Nouvelles" : "News"}
+                        description={language === 'fr' ? "Consultez les dernières nouvelles sur les entreprises et les marchés financiers." : "Check out the latest news on companies and financial markets."}
+                        nextLink="/app/settings?onboarding=4"
+                    />}
+                    {onboardingStage === '4' && <OnboardingCard
+                        title={language === 'fr' ? "Paramètres" : "Settings"}
+                        description={language === 'fr' ? "Personnalisez votre tableau de bord en fonction de vos préférences." : "Customize your dashboard to suit your preferences."}
+                        nextLink="/app?onboarding=5"
+                    />}
+                    {onboardingStage === '5' && <OnboardingCard
+                        title={language === 'fr' ? "C'est tout!" : "That's it!"}
+                        description={language === 'fr' ? "Vous êtes prêt à commencer à utiliser StoX." : "You're ready to start using StoX."}
+                        nextLink="done"
                     />}
                     <div className="flex justify-between items-center w-full p-4 px-20 bg-base-300 shadow-md sticky top-0 z-20">
                         <div className="flex items-center gap-4">

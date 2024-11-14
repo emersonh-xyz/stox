@@ -50,9 +50,7 @@ export default function SocialPage() {
             <SocialFeed data={stocksData} lang={language} />
             <div className="flex flex-col gap-4">
                 <h1 className="text-2xl font-bold">Site Users</h1>
-
                 <div className="flex flex-col bg-base-300 rounded-3xl p-4 gap-4">
-
                     {users?.map((user, i) => {
                         return (
                             <div className="flex gap-2" key={i}>
@@ -64,9 +62,7 @@ export default function SocialPage() {
                             </div>
                         )
                     })}
-
                 </div>
-
             </div>
         </div>
     );
